@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Monitoring {
     @Id
     @GeneratedValue
-    int id;
+    long id;
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Kiev")
     Date date;
@@ -93,7 +93,7 @@ public class Monitoring {
         this.list = list;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

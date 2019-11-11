@@ -27,12 +27,23 @@ public class MonitoringController {
     }
 
     @PostMapping(value = "add", consumes = "application/json")
-    public String getMonitoring(@RequestBody Monitoring monitoring){
+    public String addMonitoring(@RequestBody Monitoring monitoring){
         repo.addMonitoring(monitoring);
         return "{\"status\":\"ok\"}";
     }
 
-    @PostMapping(value = "getMonitoring", consumes = "application/json")
+    @PostMapping(value = "get/{monitoringId}", consumes = "application/json")
+    public Monitoring getMonitoring(@PathVariable int monitoringId){
+       return repo.getMonitor(monitoringId);
+    }
+
+    @PostMapping(consumes = "application/json")
+    public List<Monitoring> getAllUserMonitoring(){
+        return repo.getUserMonitors(167944354);
+    }
+
+
+    @PostMapping(value = "getTemplate", consumes = "application/json")
     public Monitoring getMonitor(){
         Monitoring monitoring = new Monitoring();
         List<Passenger> passengerList = new ArrayList<>();

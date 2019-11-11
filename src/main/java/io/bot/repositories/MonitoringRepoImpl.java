@@ -26,9 +26,18 @@ public class MonitoringRepoImpl implements MonitoringRepo {
     @Override
     public List<Monitoring> getUserMonitors(long id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Query query = currentSession.createQuery("from Monitoring m where m.relatesTo.chatID = " + id, Monitoring.class);
+        Query query = currentSession.createQuery("from Monitoring m where m.relatesTo.chatID = :id", Monitoring.class);
+        query.setParameter("id", (int)id);
         List<Monitoring> resultList = query.getResultList();
         return resultList;
+    }
+
+    @Override
+    public Monitoring getMonitor(long id) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query query = currentSession.createQuery("from Monitoring m where m.id= :id");
+        query.setParameter("id", id);
+        return (Monitoring) query.getSingleResult();
     }
 
     @Override
