@@ -11,5 +11,6 @@ public interface MonitoringRepo {
     Monitoring getMonitor(long id);
     void disableMonitoring(Monitoring monitoring);
     void enableMonitoring(Monitoring monitoring);
+    void deleteMonitoring(long id);
 
 }

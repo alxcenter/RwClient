@@ -35,7 +35,7 @@ public class MonitoringRepoImpl implements MonitoringRepo {
     @Override
     public Monitoring getMonitor(long id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Query query = currentSession.createQuery("from Monitoring m where m.id= :id");
+        Query query = currentSession.createQuery("from Monitoring m where m.id= :id", Monitoring.class);
         query.setParameter("id", id);
         return (Monitoring) query.getSingleResult();
     }
@@ -50,6 +50,14 @@ public class MonitoringRepoImpl implements MonitoringRepo {
     public void enableMonitoring(Monitoring monitoring) {
         monitoring.setStatus(0);
         sessionFactory.getCurrentSession().update(monitoring);
+    }
+
+    @Override
+    public void deleteMonitoring(long id) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        Query query = currentSession.createQuery("delete from Monitoring m where m.id= :id", Monitoring.class);
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
 }

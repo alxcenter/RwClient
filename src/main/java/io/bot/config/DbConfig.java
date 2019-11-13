@@ -21,16 +21,4 @@ public class DbConfig {
         dataSource.setResourceRef(true);
         return dataSource;
     }
-
-
-
-//    @Bean //этот dataSource подходит для работы локально, и соединения идет в один поток. Короче не производительно.
-//    public DataSource getDataSource1(){
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-//        dataSource.setUsername("root");
-//        dataSource.setPassword("1");
-//        dataSource.setUrl("jdbc:mysql://localhost:3306/test1?serverTimezone=UTC");
-//        return dataSource;
-//    }
 }
