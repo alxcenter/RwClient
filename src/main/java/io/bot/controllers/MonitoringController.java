@@ -26,7 +26,7 @@ public class MonitoringController {
         return "Hello";
     }
 
-    @PostMapping(value = "delete/{monitoringId}", consumes = "application/json")
+    @GetMapping(value = "delete/{monitoringId}")
     public String deleteMonitoring(@PathVariable int monitoringId){
         repo.deleteMonitoring(monitoringId);
         return "{\"status\":\"ok\"}";
@@ -38,7 +38,7 @@ public class MonitoringController {
         return "{\"status\":\"ok\"}";
     }
 
-    @PostMapping(value = "get/{monitoringId}", consumes = "application/json")
+    @GetMapping(value = "get/{monitoringId}")
     public Monitoring getMonitoring(@PathVariable int monitoringId){
        return repo.getMonitor(monitoringId);
     }

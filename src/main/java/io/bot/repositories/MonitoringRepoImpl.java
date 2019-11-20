@@ -55,7 +55,7 @@ public class MonitoringRepoImpl implements MonitoringRepo {
     @Override
     public void deleteMonitoring(long id) {
         Session currentSession = sessionFactory.getCurrentSession();
-        Query query = currentSession.createQuery("delete from Monitoring m where m.id= :id", Monitoring.class);
+        Query query = currentSession.createQuery("delete from Monitoring m where m.id= :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }

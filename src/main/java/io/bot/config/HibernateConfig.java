@@ -1,6 +1,10 @@
 package io.bot.config;
 
 import org.hibernate.SessionFactory;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
@@ -12,7 +16,13 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+@EnableAutoConfiguration(exclude = {
+        DataSourceAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class, //
+        HibernateJpaAutoConfiguration.class
+})
 public class HibernateConfig {
+
     @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource){
         LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
