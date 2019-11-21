@@ -221,7 +221,7 @@ public class ChoseStationStep extends Stepper {
 
     private void saveStationsToDb(Map<Integer, String> map){
         for (Map.Entry<Integer, String> s : map.entrySet()) {
-            stationRepository.saveStation(new Station(s.getKey(), s.getValue()));
+            stationRepository.save(new Station(s.getKey(), s.getValue()));
         }
     }
 

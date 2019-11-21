@@ -14,16 +14,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Configuration
-@EnableTransactionManagement
-@EnableAutoConfiguration(exclude = {
-        DataSourceAutoConfiguration.class,
-        DataSourceTransactionManagerAutoConfiguration.class, //
-        HibernateJpaAutoConfiguration.class
-})
+//@Configuration
+//@EnableTransactionManagement
+//@EnableAutoConfiguration(exclude = {
+//        DataSourceAutoConfiguration.class,
+//        DataSourceTransactionManagerAutoConfiguration.class, //
+//        HibernateJpaAutoConfiguration.class
+//})
 public class HibernateConfig {
 
-    @Bean
+//    @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource){
         LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
         bean.setDataSource(dataSource);
@@ -36,7 +36,7 @@ public class HibernateConfig {
         return bean;
     }
 
-    @Bean
+//    @Bean
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory){
         HibernateTransactionManager manager = new HibernateTransactionManager();
         manager.setSessionFactory(sessionFactory);

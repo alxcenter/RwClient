@@ -12,15 +12,15 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 
 import javax.sql.DataSource;
 
-@Configuration
-@Import(HibernateConfig.class)
-@ComponentScan("io.bot.repositories")
+//@Configuration
+//@Import(HibernateConfig.class)
+//@ComponentScan("io.bot.repositories")
 public class DbConfig {
 
-    @Autowired
+//    @Autowired
     Environment env;
 
-    @Bean
+//    @Bean
     public DataSource getBasicDataSource(){
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(env.getProperty("spring.datasource.driver-class-name"));

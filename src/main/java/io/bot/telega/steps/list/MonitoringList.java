@@ -1,8 +1,8 @@
 package io.bot.telega.steps.list;
 
 import io.bot.model.Monitoring;
-import io.bot.repositories.MonitoringRepo;
 import io.bot.repositories.StationRepo;
+import io.bot.service.MonitoringService;
 import io.bot.telega.BotHelper;
 import io.bot.telega.steps.UpdateResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import static io.bot.telega.Emoji.LOCOMOTIVE;
 public class MonitoringList  extends BotHelper implements UpdateResolver {
 
     @Autowired
-    MonitoringRepo monitoringRepo;
+    MonitoringService monitoringService;
 
     @Autowired
     StationRepo stationRepo;
@@ -27,7 +27,7 @@ public class MonitoringList  extends BotHelper implements UpdateResolver {
 
     @Override
     public void updateAction(Update update) {
-        List<Monitoring> userMonitors = monitoringRepo.getUserMonitors(update.getMessage().getChatId());
+        List<Monitoring> userMonitors = monitoringService.getAllUserMonitorings(update.getMessage().getChatId());
         getUpdateData(update);
         StringBuilder builder = new StringBuilder();
         userMonitors.forEach(x -> builder.append(LOCOMOTIVE + getFormattedMessage(x) + "\n"));
@@ -40,9 +40,9 @@ public class MonitoringList  extends BotHelper implements UpdateResolver {
         StringBuilder builder = new StringBuilder();
         builder.append(monitoring.getTrainNumber());
         builder.append(" ");
-        builder.append(stationRepo.getStation(Integer.parseInt(monitoring.getFromStation())).getStationName());
+        builder.append(stationRepo.findByStationCode(Integer.parseInt(monitoring.getFromStation())).getStationName());
         builder.append("-");
-        builder.append(stationRepo.getStation(Integer.parseInt(monitoring.getToStation())).getStationName());
+        builder.append(stationRepo.findByStationCode(Integer.parseInt(monitoring.getToStation())).getStationName());
         builder.append(" ");
         builder.append(monitoring.getDate());
         return builder.toString();

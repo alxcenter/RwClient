@@ -5,6 +5,7 @@ import io.bot.model.Passenger;
 import io.bot.model.PlaceFilter;
 import io.bot.model.User;
 import io.bot.repositories.MonitoringRepo;
+import io.bot.service.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import java.util.Locale;
 public class MonitoringController {
 
     @Autowired
-    MonitoringRepo repo;
+    MonitoringService monitoringService;
 
     @GetMapping
     public String infoPage(){
@@ -28,19 +29,19 @@ public class MonitoringController {
 
     @GetMapping(value = "delete/{monitoringId}")
     public String deleteMonitoring(@PathVariable int monitoringId){
-        repo.deleteMonitoring(monitoringId);
+        monitoringService.deleteMonitoring(monitoringId);
         return "{\"status\":\"ok\"}";
     }
 
     @PostMapping(value = "add", consumes = "application/json")
     public String addMonitoring(@RequestBody Monitoring monitoring){
-        repo.addMonitoring(monitoring);
+        monitoringService.createMonitoring(monitoring);
         return "{\"status\":\"ok\"}";
     }
 
     @GetMapping(value = "get/{monitoringId}")
     public Monitoring getMonitoring(@PathVariable int monitoringId){
-       return repo.getMonitor(monitoringId);
+       return monitoringService.getMonitoring(monitoringId);
     }
 
 

@@ -4,6 +4,7 @@ import io.bot.model.Monitoring;
 import io.bot.model.User;
 //import io.bot.services.MonitoringService;
 import io.bot.repositories.MonitoringRepo;
+import io.bot.service.MonitoringService;
 import io.bot.telega.steps.Stepper;
 import io.bot.telega.steps.UpdateResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class StartAction implements UpdateResolver {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    MonitoringRepo monitoringRepo;
+    MonitoringService monitoringService;
     User user;
     boolean isUserExist;
 
@@ -82,7 +83,7 @@ public class StartAction implements UpdateResolver {
                     break;
                 }
             case 5:
-                monitoringRepo.addMonitoring(monitoring);
+                monitoringService.createMonitoring(monitoring);
                 resetAll();
                 break;
             default:

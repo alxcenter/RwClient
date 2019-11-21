@@ -10,11 +10,11 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-//@Configuration
-//@ComponentScan("io.bot.telega")
+@Configuration
+@ComponentScan("io.bot.telega")
 public class TelegaConf {
-//    @Bean
-//    @Scope("singleton")
+    @Bean
+    @Scope("singleton")
     public Bot getBot(){
         ApiContextInitializer.init();
         Bot bot = new Bot();
@@ -27,7 +27,7 @@ public class TelegaConf {
         return bot;
     }
 
-//    @Bean
+    @Bean
     public MessagePool getMessagePool(){
         MessagePool messagePool = new MessagePool(getBot());
         messagePool.startSending();

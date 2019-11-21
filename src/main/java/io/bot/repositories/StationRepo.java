@@ -1,8 +1,8 @@
 package io.bot.repositories;
 
 import io.bot.model.Station;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StationRepo {
-    public void saveStation(Station station);
-    public Station getStation(int stationCode);
+public interface StationRepo extends JpaRepository<Station, Integer> {
+    Station findByStationCode(int stationCode);
 }

@@ -83,7 +83,7 @@ public class CheckAuthStep extends Stepper {
                 user.setChatID(toIntExact(update.getMessage().getChatId()));
                 user.setChatID(contact.getUserID());
                 user.setPhoneNumber(contact.getPhoneNumber());
-                userRepository.createUser(user);
+                userRepository.save(user);
                 userExist = true;
                 monitoring.setRelatesTo(user);
             }else {
@@ -107,7 +107,7 @@ public class CheckAuthStep extends Stepper {
 
     private void checkUserForExist() {
         this.wasChecked = true;
-        User user = userRepository.getUser(toIntExact(chat_id));
+        User user = userRepository.getUserByChatID(toIntExact(chat_id));
         userExist = user!=null;
         if (!userExist) {
             sendPhoneRequest();

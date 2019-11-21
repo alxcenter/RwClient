@@ -11,11 +11,11 @@ public class User {
 
     @Id
     @Column(name = "chat_id")
-    int chatID;
+    long chatID;
     @Column(name = "phone_number")
     String phoneNumber;
 
-    public int getChatID() {
+    public long getChatID() {
         return chatID;
     }
 
