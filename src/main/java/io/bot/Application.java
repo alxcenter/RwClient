@@ -1,7 +1,6 @@
 package io.bot;
 
 
-import io.bot.config.AppConf;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
