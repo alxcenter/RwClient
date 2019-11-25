@@ -1,9 +1,11 @@
 package io.bot.service;
 
 import io.bot.model.Monitoring;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 public interface MonitoringService {
 
     void createMonitoring(Monitoring monitoring);
