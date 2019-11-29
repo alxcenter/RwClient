@@ -4,7 +4,6 @@ import io.bot.model.Monitoring;
 import io.bot.model.Passenger;
 import io.bot.model.PlaceFilter;
 import io.bot.model.User;
-import io.bot.repositories.MonitoringRepo;
 import io.bot.service.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
