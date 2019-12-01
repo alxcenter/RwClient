@@ -7,8 +7,16 @@ import javax.persistence.Id;
 public class Station {
 
     @Id
-    int stationCode;
-    String stationName;
+    private int stationCode;
+    private String stationName;
+
+    public Station(int stationCode, String stationName) {
+        this.stationCode = stationCode;
+        this.stationName = stationName;
+    }
+
+    public Station() {
+    }
 
     public int getStationCode() {
         return stationCode;
@@ -28,11 +36,7 @@ public class Station {
         return this;
     }
 
-    public Station(int stationCode, String stationName) {
-        this.stationCode = stationCode;
-        this.stationName = stationName;
-    }
 
-    public Station() {
-    }
+
+
 }

@@ -34,8 +34,6 @@ public class BotHelper {
     protected List<Integer> messagesForRemove = new ArrayList<>();
 
 
-
-
     public Message sendMessage(String messageBody, ReplyKeyboard replyKeyboard) {
         Message execute = null;
         SendMessage message = new SendMessage(chat_id, messageBody); // Create a message object object

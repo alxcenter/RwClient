@@ -15,7 +15,7 @@ public class UserService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null/*userRepo.findByUsername(username)*/;
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return userRepo.getUserByChatID(Long.valueOf(s));
     }
 }

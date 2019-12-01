@@ -17,7 +17,7 @@ import java.util.List;
 public class RequestNtw {
 
     @Autowired
-    RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     private final String AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
     private final String url = "https://booking.uz.gov.ua/ru/";

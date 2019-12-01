@@ -18,14 +18,12 @@ public class TrainSearch {
 
     @Autowired
     private RequestNtw request;
-
     private static String seachBy = "train_search";
     private String post;
     private String from;
     private String to;
     private Date date;
     private String time;
-
     private TrainParser trainParser;
 
     public TrainSearch() {

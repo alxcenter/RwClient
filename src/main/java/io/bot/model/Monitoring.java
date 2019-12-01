@@ -22,17 +22,17 @@ import java.util.Objects;
 public class Monitoring {
     @Id
     @GeneratedValue
-    long id;
+    private long id;
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Kiev")
-    Date date;
+    private Date date;
     @Column(name = "from_station")
-    String fromStation;
+    private String fromStation;
     @Column(name = "to_station")
-    String toStation;
+    private String toStation;
     @Column(name = "train_number")
-    String trainNumber;
-    int status;
+    private String trainNumber;
+    private int status;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(
@@ -40,8 +40,7 @@ public class Monitoring {
             joinColumns = @JoinColumn(name = "monitoring_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "chat_id")
     )
-    User relatesTo;
-
+    private User relatesTo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
@@ -49,9 +48,9 @@ public class Monitoring {
             joinColumns = @JoinColumn(name = "monitoring_id"),
             inverseJoinColumns = @JoinColumn(name = "passenger_id")
     )
-            @Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.JOIN)
 //    @JsonIgnore
-    List<Passenger> list = new ArrayList<>();
+    private List<Passenger> list = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(
@@ -59,7 +58,7 @@ public class Monitoring {
             joinColumns = @JoinColumn(name = "monitoring_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "place_filter_id", referencedColumnName = "id")
     )
-    PlaceFilter placeFilter;
+    private PlaceFilter placeFilter;
 
     public User getRelatesTo() {
         return relatesTo;

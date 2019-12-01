@@ -4,6 +4,6 @@ spring:
       ddl-auto: update
     show-sql: true
   datasource:
-    url: jdbc:mysql://localhost:3306/test2?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/rwclient?serverTimezone=UTC
     username: root
     password: 1

@@ -16,9 +16,9 @@ import java.util.Properties;
  */
 public class Bot extends TelegramLongPollingBot {
 
-    Map<Long, UpdateManager> updates = new HashMap<>();
+    private Map<Long, UpdateManager> updates = new HashMap<>();
     @Autowired
-    UpdateManager um;
+    private UpdateManager um;
 
     private static final String BOT_USER_NAME = getProperty("name");
     private static final String BOT_TOKEN = getProperty("key");

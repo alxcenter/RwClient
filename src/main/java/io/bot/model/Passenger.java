@@ -7,8 +7,6 @@ import javax.persistence.*;
 @Entity
 public class Passenger {
 
-    public static final int FINISHED = 1;
-
     public Passenger() {
     }
 
@@ -19,25 +17,25 @@ public class Passenger {
 
     @Id
     @GeneratedValue
-    int id;
-    String name;
-    String surname;
-    int status;
-    String studentCard = "";
-    String bedding = "1";
-    String child = "";
+    private int id;
+    private String name;
+    private String surname;
+    private int status;
+    private String studentCard = "";
+    private String bedding = "1";
+    private String child = "";
     @OneToOne(cascade = CascadeType.ALL)
-            @JoinTable(
-                    name = "passenger_relates_place_filter",
-                    joinColumns = @JoinColumn(name = "pass_id", referencedColumnName = "id"),
-                    inverseJoinColumns = @JoinColumn(name = "place_filter_id", referencedColumnName = "id")
-            )
+    @JoinTable(
+            name = "passenger_relates_place_filter",
+            joinColumns = @JoinColumn(name = "pass_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "place_filter_id", referencedColumnName = "id")
+    )
     @JsonIgnore
-    PlaceFilter placeFilter;
+    private PlaceFilter placeFilter;
 
     @ManyToOne(cascade = CascadeType.ALL)
-            @JsonIgnore
-    Monitoring monitoring;
+    @JsonIgnore
+    private Monitoring monitoring;
 
     public int getStatus() {
         return status;

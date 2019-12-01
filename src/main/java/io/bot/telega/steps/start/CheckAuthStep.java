@@ -83,6 +83,9 @@ public class CheckAuthStep extends Stepper {
                 user.setChatID(toIntExact(update.getMessage().getChatId()));
                 user.setChatID(contact.getUserID());
                 user.setPhoneNumber(contact.getPhoneNumber());
+                user.setFirstName(contact.getFirstName());
+                user.setLastName(contact.getLastName());
+                user.setTelegaUsername(update.getMessage().getFrom().getUserName());
                 userRepository.save(user);
                 userExist = true;
                 monitoring.setRelatesTo(user);
