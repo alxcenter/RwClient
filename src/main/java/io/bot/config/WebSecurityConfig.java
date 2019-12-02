@@ -33,7 +33,7 @@ UserService userService;
                     .csrf().disable()// отключил csrf на время написания rest
                     .formLogin()
                     .loginPage("/auth")
-                    .loginProcessingUrl("/login")
+                    .loginProcessingUrl("/auth/processing")
                     .permitAll()
                 .and()
 
@@ -41,17 +41,6 @@ UserService userService;
                     .permitAll();
     }
 
-//    @Bean
-//    @Override
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user =
-//                User.withDefaultPasswordEncoder()
-//                        .username("sasha_zaitsev")
-//                        .password("sasha_zaitsev")
-//                        .roles("USER")
-//                        .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)

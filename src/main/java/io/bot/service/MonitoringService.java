@@ -8,7 +8,7 @@ import java.util.List;
 @Transactional
 public interface MonitoringService {
 
-    void createMonitoring(Monitoring monitoring);
+    Monitoring createMonitoring(Monitoring monitoring);
     Monitoring getMonitoring(long id);
     List<Monitoring> getAllUserMonitorings(long id);
     void deleteMonitoring(long id);

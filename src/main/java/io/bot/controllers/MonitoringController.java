@@ -6,6 +6,7 @@ import io.bot.model.PlaceFilter;
 import io.bot.model.User;
 import io.bot.service.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("monitoring")
+@RequestMapping("monitorings")
 public class MonitoringController {
 
     @Autowired
@@ -26,21 +27,22 @@ public class MonitoringController {
         return "Hello";
     }
 
-    @GetMapping(value = "delete/{monitoringId}")
-    public String deleteMonitoring(@PathVariable int monitoringId){
-        monitoringService.deleteMonitoring(monitoringId);
-        return "{\"status\":\"ok\"}";
+    @DeleteMapping(value = "delete/{id}")
+    public void deleteMonitoring(@PathVariable int id){
+        monitoringService.deleteMonitoring(id);
     }
 
     @PostMapping(value = "add", consumes = "application/json")
-    public String addMonitoring(@RequestBody Monitoring monitoring){
-        monitoringService.createMonitoring(monitoring);
-        return "{\"status\":\"ok\"}";
+    public Monitoring addMonitoring(
+            @RequestBody Monitoring monitoring,
+            @AuthenticationPrincipal User user){
+        monitoring.setRelatesTo(user);
+        return monitoringService.createMonitoring(monitoring);
     }
 
-    @GetMapping(value = "get/{monitoringId}")
-    public Monitoring getMonitoring(@PathVariable int monitoringId){
-       return monitoringService.getMonitoring(monitoringId);
+    @GetMapping(value = "get/{id}")
+    public Monitoring getMonitoring(@PathVariable int id){
+       return monitoringService.getMonitoring(id);
     }
 
 
