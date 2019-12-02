@@ -16,23 +16,22 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("monitorings")
 public class MonitoringController {
 
     @Autowired
-    MonitoringService monitoringService;
+    private MonitoringService monitoringService;
 
-    @GetMapping
-    public String infoPage(){
-        return "Hello";
+    @GetMapping("/monitorings")
+    public List<Monitoring> infoPage(@AuthenticationPrincipal User user){
+        return monitoringService.getAllUserMonitorings(user.getChatID());
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping("/monitorings/{id}")
     public void deleteMonitoring(@PathVariable int id){
         monitoringService.deleteMonitoring(id);
     }
 
-    @PostMapping(value = "add", consumes = "application/json")
+    @PostMapping("/monitorings")
     public Monitoring addMonitoring(
             @RequestBody Monitoring monitoring,
             @AuthenticationPrincipal User user){
@@ -40,13 +39,12 @@ public class MonitoringController {
         return monitoringService.createMonitoring(monitoring);
     }
 
-    @GetMapping(value = "get/{id}")
+    @GetMapping("/monitorings/{id}")
     public Monitoring getMonitoring(@PathVariable int id){
        return monitoringService.getMonitoring(id);
     }
 
-
-    @PostMapping(value = "getTemplate", consumes = "application/json")
+    @PostMapping("/monitorings/getTemplate")
     public Monitoring getMonitor(){
         Monitoring monitoring = new Monitoring();
         List<Passenger> passengerList = new ArrayList<>();
@@ -56,6 +54,7 @@ public class MonitoringController {
         passenger.setMonitoring(monitoring);
         passenger.setPlaceFilter(placeFilter);
         monitoring.setPassengers(passengerList);
+
 
         passengerList.add(passenger);
         passengerList.add(passenger2);

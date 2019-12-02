@@ -19,10 +19,10 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    TelegramValidation telegramValidation;
+    private TelegramValidation telegramValidation;
 
     @Autowired
-    UserRepo userRepo;
+    private UserRepo userRepo;
 
     @GetMapping
     public String auth() {
@@ -37,7 +37,7 @@ public class AuthController {
                         HttpServletResponse response) throws ServletException {
         boolean valid = telegramValidation.validate(payload);
         if (!valid){ return "/auth";}
-        User user = userRepo.getUserByChatID(Long.parseLong(payload.get("id")));
+        User user = userRepo.getUserByChatID(Long.parseLong(payload.get("id"))).get();
         if (user==null){
             User newUser = new User();
             newUser.setChatID(Long.valueOf(payload.get("id")));

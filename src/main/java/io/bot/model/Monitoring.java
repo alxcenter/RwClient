@@ -2,6 +2,7 @@ package io.bot.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -40,6 +41,7 @@ public class Monitoring {
             joinColumns = @JoinColumn(name = "monitoring_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "chat_id")
     )
+    @JsonIgnore
     private User relatesTo;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -49,7 +51,6 @@ public class Monitoring {
             inverseJoinColumns = @JoinColumn(name = "passenger_id")
     )
     @Fetch(FetchMode.JOIN)
-//    @JsonIgnore
     private List<Passenger> list = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)

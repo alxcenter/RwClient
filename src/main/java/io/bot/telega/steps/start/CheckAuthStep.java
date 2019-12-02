@@ -110,7 +110,7 @@ public class CheckAuthStep extends Stepper {
 
     private void checkUserForExist() {
         this.wasChecked = true;
-        User user = userRepository.getUserByChatID(toIntExact(chat_id));
+        User user = userRepository.getUserByChatID(toIntExact(chat_id)).get();
         userExist = user!=null;
         if (!userExist) {
             sendPhoneRequest();

@@ -21,8 +21,8 @@ public class MonitoringServiceImpl implements MonitoringService {
 
     @Override
     public Monitoring createMonitoring(Monitoring monitoring) {
-        User user = userRepo.getUserByChatID(monitoring.getRelatesTo().getChatID());
-        if (user!=null) monitoring.setRelatesTo(user);
+        userRepo.getUserByChatID(monitoring.getRelatesTo().getChatID())
+                .ifPresent(monitoring::setRelatesTo);
         return monitoringRepo.save(monitoring);
     }
 
