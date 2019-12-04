@@ -33,7 +33,6 @@ public class StationController {
                 .map(x -> new Station(x.getKey(), x.getValue()))
                 .collect(Collectors.toList());
         return stationRepo.saveAll(newStations);
-
     }
 
     @GetMapping("/stations/{id}")
@@ -48,7 +47,7 @@ public class StationController {
     }
 
     @GetMapping("/stations")
-    List<Station> all(){
+    List<Station> all(String name){
         return stationRepo.findAll();
     }
 

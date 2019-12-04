@@ -37,17 +37,16 @@ public class AuthController {
                         HttpServletResponse response) throws ServletException {
         boolean valid = telegramValidation.validate(payload);
         if (!valid){ return "/auth";}
-        User user = userRepo.getUserByChatID(Long.parseLong(payload.get("id"))).get();
-        if (user==null){
-            User newUser = new User();
-            newUser.setChatID(Long.valueOf(payload.get("id")));
-            newUser.setTelegaUsername(payload.get("username"));
-            newUser.setFirstName(payload.get("first_name"));
-            newUser.setLastName(payload.get("last_name"));
-            newUser.setPhotoUrl(payload.get("photo_url"));
-            userRepo.save(newUser);
-            user = newUser;
-        }
+        User user = userRepo.getUserByChatID(Long.parseLong(payload.get("id")))
+                .orElseGet(() -> {
+                    User newUser = new User();
+                    newUser.setChatID(Long.valueOf(payload.get("id")));
+                    newUser.setTelegaUsername(payload.get("username"));
+                    newUser.setFirstName(payload.get("first_name"));
+                    newUser.setLastName(payload.get("last_name"));
+                    newUser.setPhotoUrl(payload.get("photo_url"));
+                    return userRepo.save(newUser);
+                });
         request.login(user.getUsername(), user.getPassword());
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
         return savedRequest!=null?savedRequest.getRedirectUrl():"/";

@@ -35,7 +35,7 @@ public class Monitoring {
     private String trainNumber;
     private int status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.PERSIST})
     @JoinTable(
             name = "monitoring_user_relates",
             joinColumns = @JoinColumn(name = "monitoring_id", referencedColumnName = "id"),
