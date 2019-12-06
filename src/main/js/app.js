@@ -12,6 +12,23 @@ const client = require('./components/client');
 // tag::app[]
 class App extends React.Component {
 
+
+
+    render() {
+        return (
+            <div>
+                <ButtonAppBar/>
+                <TelegramLogin/>
+            </div>
+
+        )
+    }
+}
+// end::app[]
+
+// tag::employee-list[]
+class MonitoringList extends React.Component{
+
     constructor(props) {
         super(props);
         this.state = {monitorings: []};
@@ -23,23 +40,9 @@ class App extends React.Component {
         });
     }
 
-    render() {
-        return (
-            <div>
-                <ButtonAppBar/>
-                <TelegramLogin/>
-                <MonitoringList monitorings={this.state.monitorings}/>
-            </div>
 
-        )
-    }
-}
-// end::app[]
-
-// tag::employee-list[]
-class MonitoringList extends React.Component{
     render() {
-        const monitorings = this.props.monitorings.map(monitoring =>
+        const monitorings = this.state.monitorings.map(monitoring =>
             <Monitoring key={monitoring.id} monitoring={monitoring}/>
         );
         return (

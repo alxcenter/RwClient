@@ -4,6 +4,7 @@ import io.bot.helper.TelegramValidation;
 import io.bot.model.User;
 import io.bot.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("auth")
@@ -25,10 +27,9 @@ public class AuthController {
     private UserRepo userRepo;
 
     @GetMapping
-    public String auth() {
-        return "auth";
+    public String auth(@AuthenticationPrincipal User user) {
+        return user==null?"auth":"redirect:/";
     }
-
 
     @PostMapping(consumes = "application/json", produces = "text/plain")
     @ResponseBody
