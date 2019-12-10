@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Transactional
 public interface MonitoringRepo extends JpaRepository<Monitoring, Long> {
     List<Monitoring> findMonitoringsByRelatesToChatID(long id);
-    Monitoring findMonitoringById(long id);
+    Optional<Monitoring> findMonitoringById(long id);
     void deleteMonitoringById(long id);
 }

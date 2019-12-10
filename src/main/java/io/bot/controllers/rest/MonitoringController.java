@@ -1,4 +1,4 @@
-package io.bot.controllers;
+package io.bot.controllers.rest;
 
 import io.bot.model.Monitoring;
 import io.bot.model.Passenger;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
+@RequestMapping("api")
 public class MonitoringController {
 
     @Autowired

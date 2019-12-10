@@ -1,10 +1,10 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/monitoringCard.ftl" as card>
 
 <@c.template>
     <div>
-        <#list monitors as monitor>
-            <span>${monitor.fromStation}</span><#sep>,
-            <span>${monitor.toStation}</span>
-        </#list>
+            <@card.monCard monitors/>
+            <#--<span>${monitor.fromStation}</span><#sep>,-->
+            <#--<span>${monitor.toStation}</span>-->
     </div>
 </@c.template>

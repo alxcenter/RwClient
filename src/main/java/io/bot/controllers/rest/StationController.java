@@ -1,4 +1,4 @@
-package io.bot.controllers;
+package io.bot.controllers.rest;
 
 import io.bot.exceptions.StationNotFoundException;
 import io.bot.model.Station;
@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("api")
 public class StationController {
 
     @Autowired
@@ -50,7 +51,4 @@ public class StationController {
     List<Station> all(String name){
         return stationRepo.findAll();
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 package io.bot.service;
 
+import io.bot.exceptions.MonitoringNotFoundException;
 import io.bot.model.Monitoring;
 import io.bot.model.User;
 import io.bot.repositories.MonitoringRepo;
@@ -28,7 +29,8 @@ public class MonitoringServiceImpl implements MonitoringService {
 
     @Override
     public Monitoring getMonitoring(long id) {
-        return monitoringRepo.findMonitoringById(id);
+        return monitoringRepo.findMonitoringById(id)
+                .orElseThrow(() -> new MonitoringNotFoundException(id));
     }
 
     @Override
