@@ -40,9 +40,9 @@ public class MonitoringList  extends BotHelper implements UpdateResolver {
         StringBuilder builder = new StringBuilder();
         builder.append(monitoring.getTrainNumber());
         builder.append(" ");
-        builder.append(stationRepo.findByStationCode(Integer.parseInt(monitoring.getFromStation())).getStationName());
+        builder.append(stationRepo.findByStationCode(monitoring.getFromStation().getStationCode()).getStationName());
         builder.append("-");
-        builder.append(stationRepo.findByStationCode(Integer.parseInt(monitoring.getToStation())).getStationName());
+        builder.append(stationRepo.findByStationCode(monitoring.getToStation().getStationCode()).getStationName());
         builder.append(" ");
         builder.append(monitoring.getDate());
         return builder.toString();

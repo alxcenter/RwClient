@@ -1,19 +1,14 @@
 package io.bot.controllers.rest;
 
 import io.bot.model.Monitoring;
-import io.bot.model.Passenger;
-import io.bot.model.PlaceFilter;
+import io.bot.model.Status;
 import io.bot.model.User;
 import io.bot.service.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("api")
@@ -45,34 +40,13 @@ public class MonitoringController {
        return monitoringService.getMonitoring(id);
     }
 
-    @PostMapping("/monitorings/getTemplate")
-    public Monitoring getMonitor(){
-        Monitoring monitoring = new Monitoring();
-        List<Passenger> passengerList = new ArrayList<>();
-        Passenger passenger = new Passenger("Max", "Jackson");
-        Passenger passenger2 = new Passenger("Pit", "Walker");
-        PlaceFilter placeFilter = new PlaceFilter().setWagon_k_type(true);
-        passenger.setMonitoring(monitoring);
-        passenger.setPlaceFilter(placeFilter);
-        monitoring.setPassengers(passengerList);
+    @PostMapping("monitoring/disable/{id}")
+    public String disableMonitoring(@PathVariable long id){
+        return monitoringService.disableMonitoring(id).name();
+    }
 
-
-        passengerList.add(passenger);
-        passengerList.add(passenger2);
-        monitoring.setFromStation("777");
-        monitoring.setToStation("888");
-        try {
-            monitoring.setDate(new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2019-11-07"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        monitoring.setTrainNumber("080К");
-        monitoring.setPlaceFilter(placeFilter);
-
-        User user = new User();
-        user.setChatID(215646446);
-        user.setPhoneNumber("+304654646465");
-        monitoring.setRelatesTo(user);
-        return monitoring;
+    @PostMapping("monitoring/enable/{id}")
+    public String enableMonitoring(@PathVariable long id){
+        return monitoringService.enableMonitoring(id).name();
     }
 }

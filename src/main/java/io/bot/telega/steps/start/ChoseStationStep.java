@@ -109,12 +109,12 @@ public class ChoseStationStep extends Stepper {
             return false;
         }
         //засетить станцию мониторингу и занулить мапу
-        map.entrySet().forEach(x -> {
+        map.entrySet().forEach((x) -> {
             if (x.getValue().equals(messageBody)) {
                 if (isFrom) {
-                    monitoring.setFromStation(String.valueOf(x.getKey()));
+                    monitoring.setFromStation(new Station(x.getKey(), x.getValue()));
                 } else {
-                    monitoring.setToStation(String.valueOf(x.getKey()));
+                    monitoring.setToStation(new Station(x.getKey(), x.getValue()));
                 }
             }
         });

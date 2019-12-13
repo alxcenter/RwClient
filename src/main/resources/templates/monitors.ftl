@@ -8,3 +8,4 @@
             <#--<span>${monitor.toStation}</span>-->
     </div>
 </@c.template>
+<script src="/static/js/monitorService.js"></script>

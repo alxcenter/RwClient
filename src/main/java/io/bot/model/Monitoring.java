@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,13 +28,16 @@ public class Monitoring {
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Europe/Kiev")
     private Date date;
-    @Column(name = "from_station")
-    private String fromStation;
-    @Column(name = "to_station")
-    private String toStation;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "from_station")
+    private Station fromStation;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "to_station")
+    private Station toStation;
     @Column(name = "train_number")
     private String trainNumber;
-    private int status;
+    @Enumerated(EnumType.ORDINAL)
+    private Status status;
 
     @OneToOne(cascade = {CascadeType.PERSIST})
     @JoinTable(
@@ -69,11 +73,11 @@ public class Monitoring {
         this.relatesTo = relatesTo;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -109,19 +113,19 @@ public class Monitoring {
         this.date = date;
     }
 
-    public String getFromStation() {
+    public Station getFromStation() {
         return fromStation;
     }
 
-    public void setFromStation(String fromStation) {
+    public void setFromStation(Station fromStation) {
         this.fromStation = fromStation;
     }
 
-    public String getToStation() {
+    public Station getToStation() {
         return toStation;
     }
 
-    public void setToStation(String toStation) {
+    public void setToStation(Station toStation) {
         this.toStation = toStation;
     }
 

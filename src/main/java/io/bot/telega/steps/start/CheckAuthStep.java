@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static io.bot.telega.Emoji.IPHONE;
 import static io.bot.telega.Emoji.POINT_DOWN;
@@ -110,13 +111,21 @@ public class CheckAuthStep extends Stepper {
 
     private void checkUserForExist() {
         this.wasChecked = true;
-        User user = userRepository.getUserByChatID(toIntExact(chat_id)).get();
-        userExist = user!=null;
-        if (!userExist) {
-            sendPhoneRequest();
-        }else {
+        User user;
+        try {
+            user = userRepository.findById(chat_id).get();
+            userExist =true;
             monitoring.setRelatesTo(user);
+        }catch (NoSuchElementException e){
+            userExist = false;
+            sendPhoneRequest();
         }
+//        userExist = user!=null;
+//        if (!userExist) {
+//            sendPhoneRequest();
+//        }else {
+//            monitoring.setRelatesTo(user);
+//        }
     }
 
     private void  sendWelcomeMessage(){

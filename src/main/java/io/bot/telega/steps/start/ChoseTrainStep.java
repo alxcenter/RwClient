@@ -92,9 +92,11 @@ public class ChoseTrainStep extends Stepper {
         List<Train> trains = null;
         try {
             if (captcha == null) {
-                trains = trainSearch.getTrains(monitoring.getFromStation(), monitoring.getToStation(), monitoring.getDate());
+                trains = trainSearch.getTrains(String.valueOf(monitoring.getFromStation().getStationCode()),
+                        String.valueOf(monitoring.getToStation().getStationCode()), monitoring.getDate());
             } else {
-                trains = trainSearch.getTrains(monitoring.getFromStation(), monitoring.getToStation(), monitoring.getDate(), captcha);
+                trains = trainSearch.getTrains(String.valueOf(monitoring.getFromStation().getStationCode()),
+                        String.valueOf(monitoring.getToStation().getStationCode()), monitoring.getDate(), captcha);
             }
         } catch (OtherException e) {
             e.printStackTrace();

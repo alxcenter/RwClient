@@ -13,21 +13,20 @@ const client = require('./components/client');
 class App extends React.Component {
 
 
-
     render() {
         return (
             <div>
                 <ButtonAppBar/>
                 <TelegramLogin/>
             </div>
-
         )
     }
 }
+
 // end::app[]
 
 // tag::employee-list[]
-class MonitoringList extends React.Component{
+class MonitoringList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -56,16 +55,17 @@ class MonitoringList extends React.Component{
                 </tr>
                 </thead>
                 <tbody>
-                    {monitorings}
+                {monitorings}
                 </tbody>
             </table>
         )
     }
 }
+
 // end::employee-list[]
 
 // tag::employee[]
-class Monitoring extends React.Component{
+class Monitoring extends React.Component {
     render() {
         return (
             <tr>
@@ -77,11 +77,12 @@ class Monitoring extends React.Component{
         )
     }
 }
+
 // end::employee[]
 
 // tag::render[]
 ReactDOM.render(
-    <App />,
+    <App/>,
     document.getElementById('react')
 )
 // end::render[]

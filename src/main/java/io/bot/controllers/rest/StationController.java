@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,7 +29,8 @@ public class StationController {
     }
 
     @GetMapping("/stations/find")
-    public List<Station> findStation(@RequestParam String name){
+    public List<Station> findStation(@RequestParam(required = false) String name){
+        if (name == null || name.isEmpty()) return all(name);
         Map<Integer, String> stations = stationSearcher.getStations(name);
         List<Station> newStations = stations.entrySet().stream()
                 .map(x -> new Station(x.getKey(), x.getValue()))
