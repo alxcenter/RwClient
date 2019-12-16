@@ -34,6 +34,7 @@ public class MonitoringServiceImpl implements MonitoringService {
                 .ifPresent(monitoring::setFromStation);
         stationRepo.findById(monitoring.getToStation().getStationCode())
                 .ifPresent(monitoring::setToStation);
+        monitoring.setStatus(Status.ACTIVE);
         return monitoringRepo.save(monitoring);
     }
 

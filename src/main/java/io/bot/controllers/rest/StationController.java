@@ -3,6 +3,7 @@ package io.bot.controllers.rest;
 import io.bot.exceptions.StationNotFoundException;
 import io.bot.model.Station;
 import io.bot.repositories.StationRepo;
+import io.bot.service.StationService;
 import io.bot.uz.StationSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,9 @@ public class StationController {
     @Autowired
     StationSearcher stationSearcher;
 
+    @Autowired
+    StationService stationService;
+
     @PostMapping("/stations")
     public Station createStation(@RequestBody Station station){
         return stationRepo.findById(station.getStationCode())
@@ -30,12 +34,13 @@ public class StationController {
 
     @GetMapping("/stations/find")
     public List<Station> findStation(@RequestParam(required = false) String name){
-        if (name == null || name.isEmpty()) return all(name);
-        Map<Integer, String> stations = stationSearcher.getStations(name);
-        List<Station> newStations = stations.entrySet().stream()
-                .map(x -> new Station(x.getKey(), x.getValue()))
-                .collect(Collectors.toList());
-        return stationRepo.saveAll(newStations);
+//        if (name == null || name.isEmpty()) return all(name);
+//        Map<Integer, String> stations = stationSearcher.getStations(name);
+//        List<Station> newStations = stations.entrySet().stream()
+//                .map(x -> new Station(x.getKey(), x.getValue()))
+//                .collect(Collectors.toList());
+//        return stationRepo.saveAll(newStations);
+        return stationService.saveStation(name);
     }
 
     @GetMapping("/stations/{id}")
