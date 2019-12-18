@@ -21,12 +21,8 @@ public class CreateMonitoringController {
 
     @GetMapping
     @RequestMapping("add")
-    public String getAllMonitoring(
-            @AuthenticationPrincipal User user,
-            Model model){
-        List<Monitoring> allUserMonitorings = monitoringService.getAllUserMonitorings(user.getChatID());
-        model.addAttribute("monitors", allUserMonitorings);
-        return "monitors";
+    public String getAllMonitoring(){
+        return "react";
     }
 
 }

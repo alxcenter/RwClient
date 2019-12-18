@@ -2,6 +2,7 @@ package io.bot.telega.steps.start;
 
 import io.bot.model.Station;
 import io.bot.repositories.StationRepo;
+import io.bot.service.StationService;
 import io.bot.telega.steps.Stepper;
 import io.bot.uz.StationSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,7 @@ import static java.lang.Math.toIntExact;
 public class ChoseStationStep extends Stepper {
 
     @Autowired
-    StationRepo  stationRepository;
-    @Autowired
-    StationSearcher stationSearcher;
+    StationService stationService;
 
     private String fromStationSet = STATION + " *Станция отправления:* ";
     private String toStationSet = STATION + " *Станция прибытия: *";
@@ -41,7 +40,7 @@ public class ChoseStationStep extends Stepper {
     private String noStationMessage = WOMAN_SHRUG + " Такой станции нет в списке.\nПопробуй ввести название заново или повтори поиск /start";
     private String wringDateMessage = WOMAN_SHRUG + " Дата указанна в неправильном формате, попробуй еще раз.";
 
-    Map<Integer, String> map;
+    List<Station> stations;
     int progress = 0;
 
 //    public ChoseStationStep(Bot bot) {
@@ -50,7 +49,7 @@ public class ChoseStationStep extends Stepper {
 
     @Override
     protected void actionForMessage() {
-            stepFlow();
+        stepFlow();
     }
 
     @Override
@@ -96,29 +95,30 @@ public class ChoseStationStep extends Stepper {
      * Действие когда в месседже приходит /start
      * */
     private void startMessage() {
-        map = null;
+        stations = null;
         progress = 1;
         messagesForRemove.add(sendMessage(writeStationFrom).getMessageId());
     }
 
 
     private boolean setStation(String messageBody, boolean isFrom) {
-        if (map == null || !map.containsValue(messageBody)) {
+        Station station = stations.stream()
+                .filter(x -> x.getStationName().equals(messageBody))
+                .findFirst().orElse(null);
+        if (stations == null || station == null) {
             sendErrorMessage(noStationMessage);
             progress = isFrom ? 1 : 3;
             return false;
         }
         //засетить станцию мониторингу и занулить мапу
-        map.entrySet().forEach((x) -> {
-            if (x.getValue().equals(messageBody)) {
-                if (isFrom) {
-                    monitoring.setFromStation(new Station(x.getKey(), x.getValue()));
-                } else {
-                    monitoring.setToStation(new Station(x.getKey(), x.getValue()));
-                }
-            }
-        });
-        map = null;
+
+        if (isFrom) {
+            monitoring.setFromStation(station);
+        } else {
+            monitoring.setToStation(station);
+
+        }
+        stations = null;
 
         StringBuilder messageData = new StringBuilder(isFrom ? fromStationSet : toStationSet)
                 .append(messageBody)
@@ -161,7 +161,7 @@ public class ChoseStationStep extends Stepper {
         String text = String.format(template, isFrom ? "отправления" : "прибытия");
         SendMessage sendMessage = new SendMessage(chat_id, text)
                 .setReplyMarkup(getKeyboardOfStations(stationName));
-        if (map == null || map.isEmpty()) {
+        if (stations == null || stations.isEmpty()) {
             sendErrorMessage(noStationMessage);
             return false;
         } else {
@@ -180,13 +180,11 @@ public class ChoseStationStep extends Stepper {
      *вытягиваем из укрзализныци список станций.
      * */
     private ReplyKeyboardMarkup getKeyboardOfStations(String stationName) {
-        map = stationSearcher.getStations(stationName);
-        saveStationsToDb(map);
+        stations = stationService.getStations(stationName);
         List<KeyboardRow> rowList = new ArrayList<>();
-        map.values().stream().sorted().forEach(x ->
-        {
+        stations.forEach(x -> {
             KeyboardRow row = new KeyboardRow();
-            row.add(new KeyboardButton().setText(x));
+            row.add(new KeyboardButton().setText(x.getStationName()));
             rowList.add(row);
         });
         return new ReplyKeyboardMarkup()
@@ -218,12 +216,5 @@ public class ChoseStationStep extends Stepper {
     private void sendErrorMessage(String errorMessage) {
         sendMessage(errorMessage);
     }
-
-    private void saveStationsToDb(Map<Integer, String> map){
-        for (Map.Entry<Integer, String> s : map.entrySet()) {
-            stationRepository.save(new Station(s.getKey(), s.getValue()));
-        }
-    }
-
 
 }

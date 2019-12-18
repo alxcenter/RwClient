@@ -3,6 +3,7 @@ package io.bot.uz;
 import io.bot.uz.BotException.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Locale;
  * Created by ALX on 12.03.2018.
  */
 @Component
+//@SessionScope
 public class TrainSearch {
 
     @Autowired
@@ -61,7 +63,7 @@ public class TrainSearch {
         try {
             trainList = trainParser.getTrainList(json);
         } catch (CaptchaException e) {
-            throw new CaptchaException(request.getCookies());
+            throw new CaptchaException(request.getSessionCookies());
         }
         return trainList;
     }

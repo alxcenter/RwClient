@@ -20,7 +20,7 @@ UserService userService;
     protected void configure(HttpSecurity http) throws Exception {
         http
                     .authorizeRequests()
-                    .antMatchers("/", "/home", "/static/**", "/api/stations/**").permitAll()
+                    .antMatchers("/", "/home", "/static/**", "/api/**", "/captcha").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .csrf().disable()// отключил csrf на время написания rest

@@ -1,8 +1,10 @@
 package io.bot.helper;
 
 import com.google.common.hash.Hashing;
+import freemarker.template.utility.DateUtil;
 import io.bot.telega.Bot;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,17 +12,36 @@ import org.springframework.stereotype.Component;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
 //@Scope("request")
 public class TelegramValidation {
 
+    public static void main(String[] args) {
+        long l = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        System.out.println(l);
+        System.out.println(new Date().getTime());
+        System.out.println(1576576809L);
+    }
+
+    private boolean validateAuthDate(String authDateString){
+        long authDate = Long.parseLong(authDateString);
+        long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        return (currentTime - authDate) < 86400;
+    }
+
     private String BOT_TOKEN = "869759161:AAH3W6MAoiz2qMbUoQqZ7-_-QgqmIE-2JLA";
 
     public boolean validate(Map<String, String> authPayload){
+        String auth_date = authPayload.get("auth_date");
+        if (!validateAuthDate(auth_date)) {return false;}
         String dataCheckString = generateDataCheckString(authPayload);
         byte[] secretKey = getSecretKey();
         String encodedHash = null;

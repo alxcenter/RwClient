@@ -1,11 +1,16 @@
 package io.bot.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 //@ComponentScan({"io.bot.controllers", "io.bot.repositories", "io.bot.service", "io.bot.uz"})
@@ -15,7 +20,7 @@ import java.nio.charset.Charset;
 public class AppConf {
 
     @Bean
-    @Scope("prototype")
+//    @SessionScope
     public RestTemplate getRestTemplate(){
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()
@@ -23,4 +28,9 @@ public class AppConf {
         return restTemplate;
     }
 
+    @Bean
+    @Qualifier("sess")
+    public Map<String, Object> storage(){
+        return new HashMap<>();
+    }
 }

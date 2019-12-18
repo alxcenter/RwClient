@@ -3,6 +3,7 @@ package io.bot.model;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import java.util.Objects;
                         "from Monitoring m where m.status = 0")
 })
 @JsonAutoDetect
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Monitoring {
     @Id
     @GeneratedValue

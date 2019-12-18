@@ -26,7 +26,7 @@ public class StationService {
     @Autowired
     StationKeyMapRepo stationKeyMapRepo;
 
-    public List<Station> saveStation(String name) {
+    public List<Station> getStations(String name) {
         StationKeyMap keyMap = stationKeyMapRepo.findByKeywords(name);
         if (keyMap != null){
             return stationRepo.findAllById(keyMap.getStations());

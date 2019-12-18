@@ -8,12 +8,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 @Component
+//@SessionScope
 public class RequestNtw {
 
     @Autowired
@@ -21,7 +24,7 @@ public class RequestNtw {
 
     private final String AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
     private final String url = "https://booking.uz.gov.ua/ru/";
-    private String cookies;
+    private String sessionCookies;
 
     public String[] sendPost(String searchBy, String post) {
         return sendPost(searchBy, post, null);
@@ -30,21 +33,14 @@ public class RequestNtw {
     public String[] sendPost(String searchBy, String post, String cookies) {
         ResponseEntity<String> responseEntity = getResponseEntity(searchBy, post, cookies);
         List<String> list = responseEntity.getHeaders().get("set-cookie");
-        String coo = this.cookies == null ? parseCookies(list) : this.cookies;
-        String[] result = new String[2];
-        result[0] = responseEntity.getBody();
-        result[1] = coo;
-        return result;
+        String coo = this.sessionCookies == null ? parseCookies(list) : this.sessionCookies;
+        return new String[]{responseEntity.getBody(), coo};
     }
 
     public ResponseEntity<String> getResponseEntity(String searchBy, String post, String cookies) {
         MultiValueMap<String, String> headers = getHeaders();
-        if (cookies != null) {
-            headers.add("Cookie", cookies);
-            this.cookies = cookies;
-        } else if (this.cookies != null) {
-            headers.add("Cookie", this.cookies);
-        }
+        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
+        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
         headers.add("Accept", "*/*");
         headers.add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         headers.add("Origin", "https://booking.uz.gov.ua");
@@ -57,27 +53,15 @@ public class RequestNtw {
         return sendGet(searchBy, null);
     }
 
-    public String sendGet(String searchBy, boolean isImage) {
-        return sendGet(searchBy, null, false);
-    }
-
     public String sendGet(String searchBy, String cookies) {
         return sendGet(searchBy, cookies, false);
     }
 
     public String sendGet(String searchBy, String cookies, boolean isImage) {
         MultiValueMap<String, String> headers = getHeaders();
-        if (cookies != null) {
-            headers.add("Cookie", cookies);
-            this.cookies = cookies;
-        } else if (this.cookies != null) {
-            headers.add("Cookie", this.cookies);
-        }
-        if (isImage) {
-            headers.add("Accept", "image/webp,image/apng,image/*,*/*;q=0.8");
-        } else {
-            headers.add("Accept", "application/json, text/javascript, */*; q=0.01");
-        }
+        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
+        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
+        headers.add("Accept", "application/json, text/javascript, */*; q=0.01");
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<String> entity = restTemplate.getForEntity(url + searchBy, String.class, httpEntity);
         return entity.getBody();
@@ -85,26 +69,13 @@ public class RequestNtw {
 
     public InputStream getCaptcha(String searchBy, String cookies) {
         MultiValueMap<String, String> headers = getHeaders();
-        if (cookies != null) {
-            headers.add("Cookie", cookies);
-            this.cookies = cookies;
-        } else if (this.cookies != null) {
-            headers.add("Cookie", this.cookies);
-        }
+        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
+        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
         headers.add("Accept", "image/webp,image/apng,image/*,*/*;q=0.8");
-
-
-        HttpEntity headers1 = new HttpEntity(headers);
-
-        ResponseEntity<byte[]> entity = restTemplate.exchange(url + searchBy, HttpMethod.GET, headers1, byte[].class);
-//        ResponseEntity<byte[]> entity = restTemplate.getForr(url + searchBy, byte[].class, headers1);
+        HttpEntity httpEntity = new HttpEntity(headers);
+        ResponseEntity<byte[]> entity = restTemplate.exchange(url + searchBy, HttpMethod.GET, httpEntity, byte[].class);
         System.out.println(entity.getHeaders());
         return new ByteArrayInputStream(entity.getBody());
-    }
-
-    public RequestNtw setCookies(String cookies) {
-        this.cookies = cookies;
-        return this;
     }
 
     private String parseCookies(List<String> cookiesHeaders) {
@@ -120,12 +91,10 @@ public class RequestNtw {
             }
         }
         System.out.print("\nCookies is = " + cookies.toString() + "\n");
-
-        if (this.cookies == null) {
-            this.cookies = cookies.toString();
+        if (this.sessionCookies == null) {
+            this.sessionCookies = cookies.toString();
         }
         return cookies.toString();
-
     }
 
     private MultiValueMap<String, String> getHeaders() {
@@ -139,17 +108,12 @@ public class RequestNtw {
         return headers;
     }
 
-
-    public String getCookies() {
-        return cookies;
-    }
-
-    public RestTemplate getRestTemplate() {
-        return restTemplate;
-    }
-
-    public RequestNtw setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public RequestNtw setSessionCookies(String sessionCookies) {
+        this.sessionCookies = sessionCookies;
         return this;
+    }
+
+    public String getSessionCookies() {
+        return sessionCookies;
     }
 }
