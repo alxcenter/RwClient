@@ -35,7 +35,8 @@ export default function CaptchaPopup(props) {
         resolveCaptcha(text)
             .then((response) => {
                 console.log(response);
-                props.close()
+                props.close();
+                props.renderTrainList(response);
             })
             .catch(() => {
                 text = '';

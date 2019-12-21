@@ -17,8 +17,9 @@ export default function ContainedButtons(props) {
     return (
         <div>
             <Button variant="contained" size="large" color="secondary"
-                    onClick={props.acti}
-                    className={classes.button}>
+                    onClick={props.action}
+                    className={classes.button}
+            >
                 Поиск билетов
             </Button>
 

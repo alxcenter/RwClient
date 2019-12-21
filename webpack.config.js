@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: ['babel-polyfill', './src/main/js/app.js'],
+    entry: ['babel-polyfill', './src/main/resources/js/app.js'],
     cache: true,
     mode: 'development',
     output: {

@@ -1,7 +1,7 @@
 <#include "security.ftl">
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">RC</a>
+    <a class="navbar-brand" href="/">RwClient</a>
 
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -12,9 +12,6 @@
     <#if isAuthorized>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/me/add">Add</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/me/monitoring">Monitoring list</a>
             </li>
@@ -31,10 +28,10 @@
                 <button class="dropdown-item" type="button">Account</button>
                 <button class="dropdown-item" type="button">Settings</button>
                 <form action="/logout">
-                <button class="dropdown-item" type="submit">Logout</button>
+                    <button class="dropdown-item" type="submit">Logout</button>
                 </form>
             </div>
         </div>
-        </#if>
-    </div>
+    </#if>
+</div>
 </nav>

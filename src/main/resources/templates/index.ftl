@@ -1,9 +1,10 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/react.ftl" as searche>
 <#import "parts/telegaAuth.ftl" as telega>
 <#include "parts/security.ftl">
 
 <@c.template>
-<#if !isAuthorized>
+    <#if !isAuthorized>
 <div class="container">
     <div class="container">
         <div class="row justify-content-sm-center">
@@ -18,7 +19,9 @@
                                 <h5 class="card-title">Sign In</h5>
                                 <p class="card-text"></p>
                                 <@telega.telegaAuth/>
-                                <p class="card-text"><small class="text-muted">Sign in please</small></p>
+                                <p class="card-text">
+                                    <small class="text-muted">Sign in please</small>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -26,5 +29,7 @@
             </div>
         </div>
     </div>
-</#if>
+    <#else>
+        <@searche.searchComponent/>
+    </#if>
 </@c.template>

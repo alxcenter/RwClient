@@ -1,6 +1,5 @@
 import * as ReactDOM from "react-dom";
 import React from 'react';
-import FixedContainer from './conponents/Container';
-// import CaptchaPopup from './CaptchaDialog';
+import FixedContainer from './components/Container';
 
 ReactDOM.render(<FixedContainer/>, document.getElementById('root'));

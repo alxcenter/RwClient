@@ -4,7 +4,7 @@
 <head>
     <title>Sweater</title>
     <style>
-        .MuiAutocomplete-root{
+        .MuiAutocomplete-root {
             display: inline-block;
             position: center;
         }
@@ -16,6 +16,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/custom.css">
 </head>
 <body>
     <#include "navbar.ftl">

@@ -1,0 +1,9 @@
+button:focus,
+select:focus {
+    outline: none;
+}
+
+.MuiAutocomplete-root{
+    display: inline-block;
+    position: center;
+}
