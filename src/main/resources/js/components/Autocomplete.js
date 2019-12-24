@@ -15,17 +15,14 @@ export default function Asynchronous(props) {
     const [options, setOptions] = React.useState([]);
     const [timer, setTimer] = React.useState(null);
     const [inputValue, setInputValue] = React.useState(null);
-    const [invalid, setInvalid] = React.useState(false);
     const loading = open && options.length === 0 && inputValue != null;
 
-    const handleChange = event => {
+    const handleInputChange = event => {
         new Promise((resolve) => {
             if (timer) {
                 clearTimeout(timer)
             }
-            if (!invalid) {
-                setInvalid(true);
-            }
+
             let text = event.target.value;
             let t = setTimeout(() => resolve(text), 1000);
             setTimer(t);
@@ -35,10 +32,14 @@ export default function Asynchronous(props) {
             });
     };
 
+    const handleAutocompleteChange = function(event, value){
+        props.setStation(value);
+    };
+
+
+
     React.useEffect(() => {
-
         let active = true;
-
 
         if (inputValue!=null && inputValue.length < 3) {
             setOptions([]);
@@ -57,13 +58,6 @@ export default function Asynchronous(props) {
             active = false;
         };
     }, [inputValue]);
-
-    React.useEffect(() => {
-        if (!open) {
-            // setOptions([]);
-        }
-    }, [open]);
-
 
     return (
         <Autocomplete
@@ -85,8 +79,6 @@ export default function Asynchronous(props) {
             loading={loading}
             renderInput={params => (
                 <TextField
-                    error={invalid}
-                    helperText={invalid ? "Необходимо выбрать станцию" : " "}
                     {...params}
                     label={props.autocompleteName}
                     variant="outlined"
@@ -98,15 +90,10 @@ export default function Asynchronous(props) {
                             </React.Fragment>
                         ),
                     }}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
             )}
-            onChange={(event, value) => {
-                props.setStation(value);
-                if (setInvalid) {
-                    setInvalid(false);
-                }
-            }}
+            onChange={handleAutocompleteChange}
         />
     );
 }

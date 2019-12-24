@@ -21,6 +21,7 @@ public class Train {
     private Station from;
     private Station to;
     private String proxy;
+    private List<WagonType> types;
 
     public void setMain(Station from, Station to) {
         this.from = from;
@@ -81,6 +82,14 @@ public class Train {
 
     public void setProxy(String proxy) {
         this.proxy = proxy;
+    }
+
+    public List<WagonType> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<WagonType> types) {
+        this.types = types;
     }
 
     @Override

@@ -12,24 +12,43 @@ import CaptchaPopup from './CaptchaDialog';
 import {getDataAction} from './TrainSearcher.js'
 
 export default function FixedContainer() {
-
     const [captchaPopup, setCaptchaPopupOpen] = React.useState(false);
     const [trainList, setTrainListOpen] = React.useState(null);
-    const [monitor, setMonitor] = React.useState({fromStation: null, toStation: null, date: null});пше
+    const [monitor, setMonitor] = React.useState({fromStation: null, toStation: null, date: null});
+
+    /*вызываем при нажатии  на кнопку поиска поездов*/
+    let handleSearchButton = function () {
+        if (!monitor.fromStation) {
+            alert("Введите станцию отправления");
+        } else if (!monitor.toStation) {
+            alert("Введите станцию прибытия");
+        } else {
+            getDataAction(monitor)
+                .catch(() => setCaptchaPopupOpen(true))
+                .then(setTrainListOpen);
+        }
+    };
 
     let from = (<Asynchronous autocompleteName="Станция отправления"
-                             id={"async_from"}
-                             setStation={(station) => {
-                                 monitor.fromStation = station;
-                             }}
+                              id={"async_from"}
+                              setStation={(station) => {
+                                  monitor.fromStation = station;
+                              }}
+
     />);
 
-    let to =(<Asynchronous autocompleteName="Станция прибытия"
-                           id={"async_to"}
-                           setStation={(station) => {
-                               monitor.toStation = station;
-                           }}
+    let to = (<Asynchronous autocompleteName="Станция прибытия"
+                            id={"async_to"}
+                            setStation={(station) => {
+                                monitor.toStation = station;
+                            }}
     />);
+
+
+
+
+    /*Высызываем при нажатии кномки смены направления*/
+
 
     return (
         <React.Fragment>
@@ -58,15 +77,7 @@ export default function FixedContainer() {
                     </Grid>
                     <Grid item>
                         <ContainedButtons
-                            action={() => {
-                                if (monitor.fromStation == null || monitor.toStation == null) {
-
-                                } else {
-                                    getDataAction(monitor)
-                                        .catch(() => setCaptchaPopupOpen(true))
-                                        .then(setTrainListOpen);
-                                }
-                            }}/>
+                            action={handleSearchButton}/>
                     </Grid>
                 </Grid>
                 <Table trains={trainList}/>
