@@ -7,13 +7,15 @@ import Asynchronous from './Autocomplete';
 import MaterialUIPickers from './DateUI';
 import ContainedButtons from './SearchButton';
 import Grid from '@material-ui/core/Grid';
-import Table from './Table';
+import TrainListTable from './TrainTable';
 import CaptchaPopup from './CaptchaDialog';
 import {getDataAction} from './TrainSearcher.js'
+import AddUsersDialog from "./AddUsersDialog";
 
 export default function FixedContainer() {
     const [captchaPopup, setCaptchaPopupOpen] = React.useState(false);
     const [trainList, setTrainListOpen] = React.useState(null);
+    const [openPassengerOptions, setOpenPassengerOptions] = React.useState(false);
     const [monitor, setMonitor] = React.useState({fromStation: null, toStation: null, date: null});
 
     /*вызываем при нажатии  на кнопку поиска поездов*/
@@ -27,6 +29,11 @@ export default function FixedContainer() {
                 .catch(() => setCaptchaPopupOpen(true))
                 .then(setTrainListOpen);
         }
+    };
+
+    let setPassengers = function(passengers){
+        let temp = monitor;
+
     };
 
     let from = (<Asynchronous autocompleteName="Станция отправления"
@@ -43,8 +50,6 @@ export default function FixedContainer() {
                                 monitor.toStation = station;
                             }}
     />);
-
-
 
 
     /*Высызываем при нажатии кномки смены направления*/
@@ -80,11 +85,33 @@ export default function FixedContainer() {
                             action={handleSearchButton}/>
                     </Grid>
                 </Grid>
-                <Table trains={trainList}/>
+                <TrainListTable trains={trainList}
+                                setTrain={(train) => {
+                                    monitor.trainNumber = train;
+                                }}
+                                setPassengers={(passengers) => {
+                                    let temp = monitor;
+                                    temp.passengers = passengers;
+                                    setMonitor(temp);
+                                }}
+                                setPlaceFilter={(placeFilter) => {
+                                    let temp = monitor;
+                                    temp.placeFilter = placeFilter;
+                                    setMonitor(temp);
+                                }}
+                />
                 <CaptchaPopup state={captchaPopup}
                               close={() => setCaptchaPopupOpen(false)}
                               monitor={monitor}
                               renderTrainList={setTrainListOpen}/>
+                <AddUsersDialog
+                    open={openPassengerOptions}
+                    action={setOpenPassengerOptions}
+                    close={() => setOpen(false)}
+                    setPassengers={props.setPassengers}
+                    setPlaceFilter={props.setPlaceFilter}
+                    onCreate = {createMonitoring}
+                />
             </Container>
         </React.Fragment>
     );

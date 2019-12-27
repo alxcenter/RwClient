@@ -6,46 +6,51 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PassengerListDialog from './PassengerListDialog';
+import PlaceFilterForm from './PlaceFilterForm';
 
-export default function AlertDialog() {
-    const [open, setOpen] = React.useState(false);
+export default function AlertDialog(props) {
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+    const [passengers, setPassengers] = React.useState([]);
+    const [placeFilter, setPlaceFilter] = React.useState({});
+
 
     const handleClose = () => {
-        setOpen(false);
+        props.close();
+    };
+
+    const handleCreate = () => {
+        props.close();
+        console.log(placeFilter);
+        console.log(passengers);
+        props.setPlaceFilter(placeFilter);
+        props.setPassengers(passengers);
     };
 
     return (
-        <div>
-            <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Open alert dialog
-            </Button>
             <Dialog
-                open={open}
+                open={props.open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                scroll="body"
             >
-                <DialogTitle id="alert-dialog-title">{"Добавьте пассажирова в мониторинг"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Some Title</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Let Google help apps determine location. This means sending anonymous location data to
-                        Google, even when no apps are running.
+                        Укажите пассажиров для которых будет создан мониторинг
                     </DialogContentText>
-                    <PassengerListDialog/>
-                </DialogContent>
+                    <PlaceFilterForm setPlaceFilter={setPlaceFilter}/>
+                    <PassengerListDialog setPassengers={setPassengers}/>
+                </DialogContent >
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} variant="outlined" color="secondary">
                         Отменить
                     </Button>
-                    <Button onClick={handleClose} color="primary" autoFocus>
-                        Сохранить
+                    <Button onClick={handleClose} variant="contained" color="secondary" autoFocus
+                    onClick={handleCreate}>
+                        Создать мониторинг
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
     );
 }
