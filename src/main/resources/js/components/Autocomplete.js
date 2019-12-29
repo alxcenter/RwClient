@@ -14,7 +14,7 @@ export default function Asynchronous(props) {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const [timer, setTimer] = React.useState(null);
-    const [inputValue, setInputValue] = React.useState(null);
+    const [inputValue, setInputValue] = React.useState('');
     const loading = open && options.length === 0 && inputValue != null;
 
     const handleInputChange = event => {
@@ -41,7 +41,7 @@ export default function Asynchronous(props) {
     React.useEffect(() => {
         let active = true;
 
-        if (inputValue!=null && inputValue.length < 3) {
+        if (inputValue.length < 3) {
             setOptions([]);
             return undefined;
         }

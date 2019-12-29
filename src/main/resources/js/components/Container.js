@@ -9,7 +9,7 @@ import ContainedButtons from './SearchButton';
 import Grid from '@material-ui/core/Grid';
 import TrainListTable from './TrainTable';
 import CaptchaPopup from './CaptchaDialog';
-import {getDataAction} from './TrainSearcher.js'
+import {getTrainList, createMonitoring} from './TrainSearcher'
 import AddUsersDialog from "./AddUsersDialog";
 
 export default function FixedContainer() {
@@ -25,15 +25,10 @@ export default function FixedContainer() {
         } else if (!monitor.toStation) {
             alert("Введите станцию прибытия");
         } else {
-            getDataAction(monitor)
+            getTrainList(monitor)
                 .catch(() => setCaptchaPopupOpen(true))
                 .then(setTrainListOpen);
         }
-    };
-
-    let setPassengers = function(passengers){
-        let temp = monitor;
-
     };
 
     let from = (<Asynchronous autocompleteName="Станция отправления"
@@ -51,6 +46,9 @@ export default function FixedContainer() {
                             }}
     />);
 
+    let handleCreate = function () {
+        createMonitoring(monitor).then(console.log);
+    };
 
     /*Высызываем при нажатии кномки смены направления*/
 
@@ -87,7 +85,9 @@ export default function FixedContainer() {
                 </Grid>
                 <TrainListTable trains={trainList}
                                 setTrain={(train) => {
-                                    monitor.trainNumber = train;
+                                    let temp = monitor;
+                                    temp.trainNumber = train;
+                                    setMonitor(temp);
                                 }}
                                 setPassengers={(passengers) => {
                                     let temp = monitor;
@@ -99,6 +99,7 @@ export default function FixedContainer() {
                                     temp.placeFilter = placeFilter;
                                     setMonitor(temp);
                                 }}
+                                openPassengerDialog={setOpenPassengerOptions}
                 />
                 <CaptchaPopup state={captchaPopup}
                               close={() => setCaptchaPopupOpen(false)}
@@ -106,11 +107,10 @@ export default function FixedContainer() {
                               renderTrainList={setTrainListOpen}/>
                 <AddUsersDialog
                     open={openPassengerOptions}
-                    action={setOpenPassengerOptions}
-                    close={() => setOpen(false)}
-                    setPassengers={props.setPassengers}
-                    setPlaceFilter={props.setPlaceFilter}
-                    onCreate = {createMonitoring}
+                    openPassengerDialog={setOpenPassengerOptions}
+                    setPassengers={(passengers) => monitor.passengers = passengers}
+                    setPlaceFilter={(placeFilter) => monitor.placeFilter = placeFilter}
+                    onCreate={handleCreate}
                 />
             </Container>
         </React.Fragment>

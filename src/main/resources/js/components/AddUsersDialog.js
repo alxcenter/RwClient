@@ -15,15 +15,16 @@ export default function AlertDialog(props) {
 
 
     const handleClose = () => {
-        props.close();
+        props.openPassengerDialog(false);
     };
 
     const handleCreate = () => {
-        props.close();
         console.log(placeFilter);
         console.log(passengers);
         props.setPlaceFilter(placeFilter);
         props.setPassengers(passengers);
+        props.openPassengerDialog(false);
+        props.onCreate();
     };
 
     return (

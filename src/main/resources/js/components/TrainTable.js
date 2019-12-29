@@ -22,18 +22,13 @@ const useStyles = makeStyles({
 
 export default function SimpleTable(props) {
 
-    const [open, setOpen] = React.useState(false);
     const [train, setTrain] = React.useState(null);
 
     const classes = useStyles();
 
     let handleClickMonitoring = function (train) {
-        setTrain(train);
-        setOpen(true);
-    };
-
-    let createMonitoring = function () {
         props.setTrain(train.num);
+        props.openPassengerDialog(true);
     };
 
     return (props.trains != null &&

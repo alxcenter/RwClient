@@ -13,7 +13,7 @@ export async function resolveCaptcha(solved) {
         });
 }
 
-export async function getDataAction(moni) {
+export async function getTrainList(moni) {
     return fetch(`http://telega704.io/api/train`, {
         method: 'POST',
         headers: {
@@ -26,3 +26,15 @@ export async function getDataAction(moni) {
             else return response.json();
         });
 }
+
+export async function  createMonitoring(moni) {
+    return fetch(`http://telega704.io/api/monitorings`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(moni)
+    })
+        .then((response) => {return response.json()});
+}
+

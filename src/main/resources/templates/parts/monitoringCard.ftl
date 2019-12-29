@@ -64,7 +64,7 @@
                              <div class="container">
                                  <div class="row">
                                      <div class="col-sm m-2">
-                                         ${passenger.name + passenger.surname}
+                                         ${passenger.name + " " +  passenger.surname}
                                      </div>
                                      <div class="col-sm-2 mx-2">
                                          <button class="btn btn-danger" type="button" data-toggle="tooltip"
