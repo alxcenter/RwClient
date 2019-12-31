@@ -7,3 +7,7 @@ select:focus {
     display: inline-block;
     position: center;
 }
+
+.trainTable{
+    margin-top: 3rem;
+}

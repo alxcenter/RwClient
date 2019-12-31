@@ -7,6 +7,7 @@ import {KeyboardDatePicker, MuiPickersUtilsProvider,} from '@material-ui/pickers
 export default function MaterialUIPickers(props) {
     // The first commit of Material-UI
     const [selectedDate, setSelectedDate] = React.useState(new Date());
+    const [open, setOpen] = React.useState(new Date());
     let getMaxDate = () => {
         let date = new Date();
         date.setDate(date.getDate() + 30);

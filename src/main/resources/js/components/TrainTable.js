@@ -10,14 +10,15 @@ import Paper from '@material-ui/core/Paper';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import AddUsersDialog from './AddUsersDialog';
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Fade from "@material-ui/core/Fade";
+import TrainTableRow from "./TrainTableRow";
 
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     }
 });
-
 
 
 export default function SimpleTable(props) {
@@ -31,8 +32,17 @@ export default function SimpleTable(props) {
         props.openPassengerDialog(true);
     };
 
+    let handleClickChose = function (train) {
+        window.open(`https://booking.uz.gov.ua/ru/?from=${train.from.code}&to=${train.to.code}&date=${train.from.srcDate.split("T")[0]}&train=${train.num}&url=train-wagons`, '_blank');
+    };
+
     return (props.trains != null &&
-        <div>
+        <div className="trainTable">
+            <Fade
+                in={props.loading}
+            >
+                <LinearProgress color="secondary" />
+            </Fade>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
@@ -47,58 +57,13 @@ export default function SimpleTable(props) {
                     </TableHead>
                     <TableBody>
                         {props.trains.map(train => (
-                            <TableRow key={train.num}>
-                                <TableCell component="th" scope="row">
-                                    {train.num}
-                                </TableCell>
-                                <TableCell align="left">{train.from.station}<br/>{train.to.station}</TableCell>
-                                <TableCell align="left">Отправление: {train.from.date}<br/>Прибытие: {train.from.date}
-                                </TableCell>
-                                <TableCell align="left">{train.from.time}<br/>{train.to.time}</TableCell>
-                                <TableCell align="left">{train.travelTime}</TableCell>
-                                <TableCell align="left">
-                                    <Grid container direction="column" justify="center" spacing={3} >
-                                        {train.types.length > 0 ? train.types.map((type, index) => (
-                                            <Grid item>
-                                                <Grid container direction="row" justify="center" alignItems="flex-start" spacing={1}>
-                                                    <Grid item xs={2}>
-                                                        {type.id}
-                                                    </Grid>
-                                                    <Grid className="free-places" item xs={2}>
-                                                        {type.places}
-                                                    </Grid>
-                                                    <Grid item xs={7}>
-                                                        <ButtonGroup key={index} variant="contained" size="small" color="secondary">
-                                                            <Button>
-                                                                Выбрать
-                                                            </Button>
-                                                            <Button color="primary" onClick={() => handleClickMonitoring(train)}>
-                                                                Отслеживать
-                                                            </Button>
-                                                        </ButtonGroup>
-                                                    </Grid>
-                                                    <Grid item xs={1}>
-                                                    </Grid>
-                                                </Grid>
-                                            </Grid>
-                                        )) : (<Button variant="contained" size="small" color="primary"
-                                                      onClick={() => handleClickMonitoring(train)}>
-                                            Отслеживать
-                                        </Button>)}
-                                    </Grid>
-                                </TableCell>
-                            </TableRow>
+                            <TrainTableRow train={train}
+                            onChose={(train) => handleClickChose(train)}
+                            onCreate={(train) => handleClickMonitoring(train)}/>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
-            {/*<AddUsersDialog*/}
-                {/*open={open}*/}
-                {/*close={() => setOpen(false)}*/}
-                {/*setPassengers={props.setPassengers}*/}
-                {/*setPlaceFilter={props.setPlaceFilter}*/}
-                {/*onCreate = {createMonitoring}*/}
-            {/*/>*/}
         </div>
     );
 }

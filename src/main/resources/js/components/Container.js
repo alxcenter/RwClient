@@ -12,22 +12,28 @@ import CaptchaPopup from './CaptchaDialog';
 import {getTrainList, createMonitoring} from './TrainSearcher'
 import AddUsersDialog from "./AddUsersDialog";
 
+
 export default function FixedContainer() {
     const [captchaPopup, setCaptchaPopupOpen] = React.useState(false);
     const [trainList, setTrainListOpen] = React.useState(null);
     const [openPassengerOptions, setOpenPassengerOptions] = React.useState(false);
     const [monitor, setMonitor] = React.useState({fromStation: null, toStation: null, date: null});
+    const [loading, setLoading] = React.useState(false);
 
-    /*вызываем при нажатии  на кнопку поиска поездов*/
+
+    /*вызываем при нажатии на кнопку поиска поездов*/
     let handleSearchButton = function () {
         if (!monitor.fromStation) {
             alert("Введите станцию отправления");
         } else if (!monitor.toStation) {
             alert("Введите станцию прибытия");
         } else {
+            if (trainList==null){setTrainListOpen([])}
+            setLoading(true);
             getTrainList(monitor)
                 .catch(() => setCaptchaPopupOpen(true))
-                .then(setTrainListOpen);
+                .then(setTrainListOpen)
+                .then(() => setLoading(false));
         }
     };
 
@@ -100,11 +106,13 @@ export default function FixedContainer() {
                                     setMonitor(temp);
                                 }}
                                 openPassengerDialog={setOpenPassengerOptions}
+                                loading={loading}
                 />
                 <CaptchaPopup state={captchaPopup}
                               close={() => setCaptchaPopupOpen(false)}
                               monitor={monitor}
                               renderTrainList={setTrainListOpen}/>
+
                 <AddUsersDialog
                     open={openPassengerOptions}
                     openPassengerDialog={setOpenPassengerOptions}
