@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import TableRow from "@material-ui/core/TableRow";
+import Skeleton from '@material-ui/lab/Skeleton';
 import React from "react";
 
 export default function SimpleTable(props) {
@@ -30,16 +31,16 @@ export default function SimpleTable(props) {
                                 {type.places}
                             </Grid>
                             <Grid item>
-                                <ButtonGroup key={index} variant="contained" size="small"
-                                             color="secondary">
-                                    <Button onClick={() => props.onChose()}>
-                                        Выбрать
-                                    </Button>
-                                    <Button color="primary"
-                                            onClick={() => props.onCreate(train)}>
-                                        Отслеживать
-                                    </Button>
-                                </ButtonGroup>
+                                {type.id.length<3?(<ButtonGroup key={index} variant="contained" size="small"
+                                                                 color="secondary">
+                                <Button onClick={() => props.onChose()}>
+                                    Выбрать
+                                </Button>
+                                <Button color="primary"
+                                        onClick={() => props.onCreate(train)}>
+                                    Отслеживать
+                                </Button>
+                            </ButtonGroup>):(<Skeleton variant="rect" width={150} height={30} />)}
                             </Grid>
                         </Grid>
                     </Grid>

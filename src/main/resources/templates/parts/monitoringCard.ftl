@@ -69,7 +69,7 @@
                                      <div class="col-sm-2 mx-2">
                                          <button class="btn btn-danger" type="button" data-toggle="tooltip"
                                                  data-placement="top"
-                                                 title="Delete from monitoring">
+                                                 title="Delete from monitoring" onclick="alert('Функционал не реализован')">
                                              Delete
                                          </button>
                                      </div>

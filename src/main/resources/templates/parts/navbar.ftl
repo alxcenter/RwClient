@@ -22,7 +22,7 @@
         <div class="btn-group">
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
-                User
+                ${firstName}
             </button>
             <div class="dropdown-menu dropdown-menu-right">
                 <button class="dropdown-item" type="button">Account</button>

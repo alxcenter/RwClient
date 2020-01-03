@@ -11,6 +11,9 @@ import TrainListTable from './TrainTable';
 import CaptchaPopup from './CaptchaDialog';
 import {getTrainList, createMonitoring} from './TrainSearcher'
 import AddUsersDialog from "./AddUsersDialog";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Fade from "@material-ui/core/Fade";
+// import {getEmptyTrains} from "./TrainSceleton";
 
 
 export default function FixedContainer() {
@@ -28,12 +31,14 @@ export default function FixedContainer() {
         } else if (!monitor.toStation) {
             alert("Введите станцию прибытия");
         } else {
-            if (trainList==null){setTrainListOpen([])}
             setLoading(true);
+
             getTrainList(monitor)
-                .catch(() => setCaptchaPopupOpen(true))
                 .then(setTrainListOpen)
-                .then(() => setLoading(false));
+                .then(() => setLoading(false))
+                .catch(() => {
+                    setCaptchaPopupOpen(true);
+                });
         }
     };
 
@@ -56,11 +61,11 @@ export default function FixedContainer() {
         createMonitoring(monitor).then(console.log);
     };
 
-    /*Высызываем при нажатии кномки смены направления*/
-
-
     return (
         <React.Fragment>
+            <Fade in={loading}>
+                <LinearProgress color="secondary" />
+            </Fade>
             <CssBaseline/><br/>
             <Container fixed>
                 <Grid container direction="row" justify="center" alignItems="center">
@@ -109,7 +114,7 @@ export default function FixedContainer() {
                                 loading={loading}
                 />
                 <CaptchaPopup state={captchaPopup}
-                              close={() => setCaptchaPopupOpen(false)}
+                              close={() => {setCaptchaPopupOpen(false); setLoading(false)}}
                               monitor={monitor}
                               renderTrainList={setTrainListOpen}/>
 
