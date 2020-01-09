@@ -11,3 +11,10 @@ select:focus {
 .trainTable{
     margin-top: 3rem;
 }
+
+.MuiBottomNavigation-root{
+    margin-top: 2rem;
+    background-color: whitesmoke;
+    border: 1px solid #cce5ff;
+    border-radius: 15px;
+}

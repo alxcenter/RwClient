@@ -7,4 +7,5 @@
 <div id="root"></div>
 <#--</#if>-->
 </@c.template>
-<script src="/static/built/bundle.js"></script>
+<script src="/static/built/babel.bundle.js"></script>
+<script src="/static/built/monitor.bundle.js"></script>

@@ -20,8 +20,6 @@ const useStyles = makeStyles({
 
 export default function SimpleTable(props) {
 
-    const [train, setTrain] = React.useState(null);
-
     const classes = useStyles();
 
     let handleClickMonitoring = function (train) {

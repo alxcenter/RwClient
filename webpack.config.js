@@ -1,12 +1,15 @@
 var path = require('path');
 
 module.exports = {
-    entry: ['babel-polyfill', './src/main/resources/js/app.js'],
+    entry: {
+        babel: 'babel-polyfill',
+        main: ['./src/main/resources/js/app.js'],
+        monitor: ['./src/main/resources/js/monitoringApp.js']},
     cache: true,
     mode: 'development',
     output: {
         path: __dirname,
-        filename: './src/main/resources/static/built/bundle.js'
+        filename: './src/main/resources/static/built/[name].bundle.js'
     },
     module: {
         rules: [

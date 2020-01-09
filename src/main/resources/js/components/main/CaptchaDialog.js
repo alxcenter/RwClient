@@ -6,7 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {resolveCaptcha} from './TrainSearcher.js'
+import {resolveCaptcha} from './trains/TrainSearcher.js'
 
 export default function CaptchaPopup(props) {
     const [open, setOpen] = React.useState(false);

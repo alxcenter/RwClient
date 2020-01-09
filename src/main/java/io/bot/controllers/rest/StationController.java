@@ -41,7 +41,7 @@ public class StationController {
     }
 
     @DeleteMapping("/stations/{id}")
-    public void deleteStation(int id){
+    public void deleteStation(@PathVariable int id){
         stationRepo.deleteById(id);
     }
 

@@ -33,7 +33,7 @@ export default function SimpleTable(props) {
                             <Grid item>
                                 {type.id.length<3?(<ButtonGroup key={index} variant="contained" size="small"
                                                                  color="secondary">
-                                <Button onClick={() => props.onChose()}>
+                                <Button onClick={() => props.onChose(train)}>
                                     Выбрать
                                 </Button>
                                 <Button color="primary"

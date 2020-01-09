@@ -11,4 +11,4 @@ server:
   port: 80
   servlet:
     session:
-      timeout: 10m
+      timeout: 100m

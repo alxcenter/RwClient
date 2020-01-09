@@ -1,6 +1,5 @@
 import * as ReactDOM from "react-dom";
 import React from 'react';
-import FixedContainer from './components/Container';
-// import FixedContainer from './components/AddUsersDialog';
+import FixedContainer from './components/main/Container';
 
 ReactDOM.render(<FixedContainer/>, document.getElementById('root'));

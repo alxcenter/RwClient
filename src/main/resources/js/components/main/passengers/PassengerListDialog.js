@@ -7,6 +7,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 
 const useStyles = makeStyles(theme => ({
@@ -94,7 +95,7 @@ export default function NestedList(props) {
             {addVisible &&
             (<Grid item>
                 <Fab color="secondary" aria-label="add" onClick={handleAddClick} size="small">
-                    <AddIcon/>
+                    <PersonAddIcon/>
                 </Fab>
             </Grid>)
             }

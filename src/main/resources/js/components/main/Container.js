@@ -7,10 +7,10 @@ import Asynchronous from './Autocomplete';
 import MaterialUIPickers from './DateUI';
 import ContainedButtons from './SearchButton';
 import Grid from '@material-ui/core/Grid';
-import TrainListTable from './TrainTable';
+import TrainListTable from './trains/TrainTable';
 import CaptchaPopup from './CaptchaDialog';
-import {getTrainList, createMonitoring} from './TrainSearcher'
-import AddUsersDialog from "./AddUsersDialog";
+import {getTrainList, createMonitoring} from './trains/TrainSearcher'
+import AddUsersDialog from "./passengers/AddUsersDialog";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fade from "@material-ui/core/Fade";
 // import {getEmptyTrains} from "./TrainSceleton";

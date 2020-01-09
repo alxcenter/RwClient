@@ -2,7 +2,7 @@
 <#import "parts/monitoringCard.ftl" as card>
 
 <@c.template>
-    <div>
+    <div class="monitorCards">
             <@card.monCard monitors/>
             <#--<span>${monitor.fromStation}</span><#sep>,-->
             <#--<span>${monitor.toStation}</span>-->
