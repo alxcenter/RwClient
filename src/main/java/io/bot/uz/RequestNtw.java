@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-//@SessionScope
+@SessionScope
 public class RequestNtw {
 
     @Autowired

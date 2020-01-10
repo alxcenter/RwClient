@@ -2,6 +2,7 @@ package io.bot.uz;
 
 import io.bot.uz.BotException.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -15,7 +16,8 @@ import java.util.Locale;
  * Created by ALX on 12.03.2018.
  */
 @Component
-//@SessionScope
+@SessionScope
+@Primary
 public class TrainSearch {
 
     @Autowired

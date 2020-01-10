@@ -12,6 +12,7 @@ import TrainIcon from '@material-ui/icons/Train';
 import PeopleIcon from '@material-ui/icons/People';
 import Badge from '@material-ui/core/Badge';
 import OptionsButton from './OptionsButton';
+import PassengersDialog from './passengers/PassengersDialog';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,17 +28,23 @@ export default function InteractiveList(props) {
     const classes = useStyles();
     const [passengerListOpen, setPassengerListOpen] = React.useState(false);
     const [monitors, setMonitors] = React.useState(null);
+    const [currentMonitor, setCurrentMonitor] = React.useState(null);
 
     React.useEffect(() => {
         setMonitors(props.monitoringList);
     });
+
+    const handleClickPassenger = (monitor) => {
+        setPassengerListOpen(true);
+        setCurrentMonitor(monitor)
+    };
 
 
     return (
         <div className={classes.root}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Typography variant="h6" className={classes.title}>
+                    <Typography align={'center'} variant="h6" className={classes.title}>
                         Список мониторингов
                     </Typography>
                     <div className={classes.demo}>
@@ -53,14 +60,14 @@ export default function InteractiveList(props) {
                                         <Grid item xs={2}>
                                             {monitor.trainNumber}
                                         </Grid>
-                                        <Grid item xs>
+                                        <Grid item xs={5}>
                                             {monitor.fromStation.stationName.concat(" > ") + monitor.toStation.stationName}
                                         </Grid>
                                         <Grid item xs={3}>
                                             {monitor.date}
                                         </Grid>
-                                        <Grid item xs={1}>
-                                            <IconButton onClick={}>
+                                        <Grid item xs={2}>
+                                            <IconButton onClick={() => handleClickPassenger(monitor)}>
                                                 <Badge badgeContent={monitor.passengers.length} color="secondary">
                                                     <PeopleIcon/>
                                                 </Badge>
@@ -68,7 +75,9 @@ export default function InteractiveList(props) {
                                         </Grid>
                                     </Grid>
                                     <ListItemSecondaryAction>
-                                        <OptionsButton/>
+                                        <OptionsButton monitoring={monitor}
+                                                       setMonitoringList={props.setMonitoringList}
+                                                       snack={props.snack}/>
                                     </ListItemSecondaryAction>
                                 </ListItem>)
                             )}
@@ -76,6 +85,10 @@ export default function InteractiveList(props) {
                     </div>
                 </Grid>
             </Grid>
+            {currentMonitor && (<PassengersDialog passengerListOpen={passengerListOpen}
+                                                  setPassengerListOpen={setPassengerListOpen}
+                                                  passengers={currentMonitor.passengers}/>)}
+
         </div>
     );
 }

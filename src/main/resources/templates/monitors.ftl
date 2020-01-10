@@ -1,11 +1,11 @@
 <#import "parts/common.ftl" as c>
-<#import "parts/monitoringCard.ftl" as card>
+<#import "parts/telegaAuth.ftl" as telega>
+<#include "parts/security.ftl">
 
 <@c.template>
-    <div class="monitorCards">
-            <@card.monCard monitors/>
-            <#--<span>${monitor.fromStation}</span><#sep>,-->
-            <#--<span>${monitor.toStation}</span>-->
-    </div>
+<#--<#if !isAuthorized>-->
+<div id="root"></div>
+<#--</#if>-->
 </@c.template>
-<script src="/static/js/monitorService.js"></script>
+<script src="/static/built/babel.bundle.js"></script>
+<script src="/static/built/monitor.bundle.js"></script>

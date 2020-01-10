@@ -1,7 +1,5 @@
 package io.bot.model;
 
-import javax.persistence.Entity;
-
 public enum Status {
     ACTIVE(0),
     FINISHED(1),

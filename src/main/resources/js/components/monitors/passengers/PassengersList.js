@@ -1,103 +1,31 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import TextField from '@material-ui/core/TextField';
-import Fab from '@material-ui/core/Fab';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
+import Badge from '@material-ui/core/Badge';
 
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        maxWidth: 600,
-        backgroundColor: theme.palette.background.paper,
-    },
-    nested: {
-        paddingLeft: theme.spacing(4),
-    },
-}));
 
 export default function NestedList(props) {
-    const classes = useStyles();
-    const [, setState] = React.useState({});
-    const [open, setOpen] = React.useState(true);
-    const [passengers, setPassengers] = React.useState([{}]);
-    const [addVisible, setAddVisible] = React.useState(true);
-    const handleClick = () => {
-        setOpen(!open);
-    };
 
-    let handleAddClick = function () {
-        passengers.push({});
-        setState({});
-        if (passengers.length >= 8) {
-            setAddVisible(false);
-        }
-    };
-
-    let handleDelete = function (index) {
-        if (passengers.length > 1) {
-            passengers.splice(index, 1);
-            setState({});
-            if (!addVisible) {
-                setAddVisible(true)
-            }
-        } else {
-            setPassengers([{}]);
-        }
-        props.setPassengers(passengers.filter(x => x.name && x.surname));
-    };
-
-    let handleInput = function (value, index) {
-        console.log(value);
-        passengers[index] = value;
-        props.setPassengers(passengers.filter(x => x.name && x.surname));
-    };
-
-    return (<div>
-        <Grid container direction="column" justify="center" alignItems="center" spacing={5}>
-            <Grid item>
-                {passengers.map((value, index, array) => (
-                    <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
-                        <Grid item>
-                            <AccountCircleIcon fontSize="large"/>
-                        </Grid>
-                        <Grid item>
-                            <TextField label="Фамилия"
-                                       onChange={(event) => {
-                                           value.surname = event.target.value;
-                                           handleInput(value, index);
-                                       }}/>
-
-                        </Grid>
-                        <Grid item>
-                            <TextField label="Имя"
-                                       onChange={(event) => {
-                                           value.name = event.target.value;
-                                           handleInput(value, index);
-                                       }}/>
-                        </Grid>
-                        <Grid item>
-                            <IconButton aria-label="delete" className={classes.margin}
-                                        onClick={() => handleDelete(index)}>
-                                <DeleteIcon fontSize="small"/>
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                ))}
-
-            </Grid>
-
-            {addVisible &&
-            (<Grid item>
-                <Fab color="secondary" aria-label="add" onClick={handleAddClick} size="small">
-                    <PersonAddIcon/>
-                </Fab>
-            </Grid>)
-            }
-        </Grid>
-    </div>);
+    return (<List>
+        {props.passengers.map((passenger, index, array) => (
+            <ListItem button>
+                <ListItemAvatar>
+                    <Badge badgeContent={passenger.status ? "done" : null} color="primary">
+                        <AccountCircleIcon fontSize="large"/>
+                    </Badge>
+                </ListItemAvatar>
+                <ListItemText primary={passenger.surname + " " + passenger.name}/>
+                <ListItemSecondaryAction>
+                    {passenger.status ? (
+                        <ConfirmationNumberIcon fontSize="small" color={passenger.status ? "primary" : ""}/>
+                    ) : ""}
+                </ListItemSecondaryAction>
+            </ListItem>
+        ))}
+    </List>);
 };

@@ -12,6 +12,13 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 
 import javax.sql.DataSource;
 
+/*
+ *
+ * Перенес на Spring Boot..
+ * Подлежт удалению
+ *
+ * */
+
 //@Configuration
 //@Import(HibernateConfig.class)
 //@ComponentScan("io.bot.repositories")

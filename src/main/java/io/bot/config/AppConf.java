@@ -20,7 +20,6 @@ import java.util.Map;
 public class AppConf {
 
     @Bean
-//    @SessionScope
     public RestTemplate getRestTemplate(){
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters()

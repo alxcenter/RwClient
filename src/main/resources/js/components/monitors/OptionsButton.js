@@ -9,6 +9,8 @@ import Delete from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
+import {deleteMonitoring} from "./MonitoringDataLoader";
+import DeleteConfirmPopup from "./DeleteConfirmPopup";
 
 const StyledMenu = withStyles({
     paper: {
@@ -19,12 +21,12 @@ const StyledMenu = withStyles({
         elevation={0}
         getContentAnchorEl={null}
         anchorOrigin={{
-            vertical: 'bottom',
+            vertical: 'center',
             horizontal: 'center',
         }}
         transformOrigin={{
             vertical: 'top',
-            horizontal: 'center',
+            horizontal: 'right',
         }}
         {...props}
     />
@@ -41,8 +43,9 @@ const StyledMenuItem = withStyles(theme => ({
     },
 }))(MenuItem);
 
-export default function CustomizedMenus() {
+export default function CustomizedMenus(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [openConfirmation, setOpenConfirmation] = React.useState(false);
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -51,6 +54,11 @@ export default function CustomizedMenus() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleDelete = (id) =>
+        deleteMonitoring(id)
+            .then(response => console.log("monitoring deleted successful"))
+            .then(handleClose);
 
     return (
         <div>
@@ -69,7 +77,7 @@ export default function CustomizedMenus() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <StyledMenuItem>
+               {/* <StyledMenuItem>
                     <ListItemIcon>
                         <Edit fontSize="small"/>
                     </ListItemIcon>
@@ -80,14 +88,23 @@ export default function CustomizedMenus() {
                         <PauseCircleFilledIcon fontSize="small"/>
                     </ListItemIcon>
                     <ListItemText primary="Поставить на паузу"/>
-                </StyledMenuItem>
-                <StyledMenuItem>
+                </StyledMenuItem>*/}
+                <StyledMenuItem onClick={() => {
+                    handleClose();
+                    setOpenConfirmation(true);
+                }}>
                     <ListItemIcon>
                         <Delete fontSize="small"/>
                     </ListItemIcon>
                     <ListItemText primary="Удалить"/>
                 </StyledMenuItem>
             </StyledMenu>
+            <DeleteConfirmPopup
+                snack={props.snack}
+                monitoring={props.monitoring}
+                open={openConfirmation}
+                setOpenConfirmation={setOpenConfirmation}
+                setMonitoringList={props.setMonitoringList}/>
         </div>
     );
 }

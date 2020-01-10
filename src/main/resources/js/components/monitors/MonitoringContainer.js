@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import MonitoringNavigation from './MonitorNav';
 import MonitoringList from './MonitoringList';
+import SnackBar from './SnackBar';
 import {getMonitorings} from './MonitoringDataLoader';
 
 let navStatusRest = ['ACTIVE', 'PAUSED', 'FINISHED', 'EXPIRED', 'DELETED'];
@@ -12,11 +13,13 @@ let navStatus = ['Активные', 'На паузе', 'Завершенные'
 export default function SimpleContainer() {
     const [monitoringList, setMonitoringList] = React.useState([]);
     const [navIndex, setNavIndex] = React.useState(0);
+    const [snackBarOpen, setSnackBarOpen] = React.useState(false);
+    const [snackBarMessage, setSnackBarMessage] = React.useState(null);
 
-    let status = null;
+    let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
 
     React.useEffect(() => {
-        if(monitoringList.length==0) {
+        if (monitoringList.length == 0) {
             getMonitorings().then(setMonitoringList);
         }
     }, [monitoringList]);
@@ -29,10 +32,14 @@ export default function SimpleContainer() {
                                       setNavIndex={setNavIndex}/>
                 <Typography component="div">
                     <MonitoringList
-                        monitoringList={monitoringList.filter(x => x.status==navStatusRest[navIndex])}
-                        setMonitoringList={setMonitoringList}/>
+                        monitoringList={monitoringList.filter(x => x.status == navStatusRest[navIndex])}
+                        setMonitoringList={setMonitoringList}
+                        snack={snack}/>
                 </Typography>
             </Container>
+            <SnackBar open={snackBarOpen}
+                      setOpen={setSnackBarOpen}
+            message={snackBarMessage}/>
         </React.Fragment>
     );
 }

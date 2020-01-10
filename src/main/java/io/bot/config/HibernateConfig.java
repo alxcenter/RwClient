@@ -14,6 +14,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+
+/*
+*
+* Перенес на Spring Boot..
+* Подлежт удалению
+*
+* */
+
 //@Configuration
 //@EnableTransactionManagement
 //@EnableAutoConfiguration(exclude = {

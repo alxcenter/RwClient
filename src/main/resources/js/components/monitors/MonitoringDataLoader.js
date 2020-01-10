@@ -3,8 +3,10 @@ export async function getMonitorings() {
         .then((response) => response.json());
 }
 
-export async function getDeleteMonitoring(id) {
-    return fetch(`http://telega704.io/api/monitorings/${id}`)
-        .then((response) => response.json());
+export async function deleteMonitoring(id) {
+    return fetch(`http://telega704.io/api/monitorings/${id}`,
+        {
+            method: 'DELETE'
+        });
 }
 
