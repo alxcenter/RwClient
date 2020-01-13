@@ -13,7 +13,8 @@ import {getTrainList, createMonitoring} from './trains/TrainSearcher'
 import AddUsersDialog from "./passengers/AddUsersDialog";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fade from "@material-ui/core/Fade";
-// import {getEmptyTrains} from "./TrainSceleton";
+import SnackBar from '../SnackBar';
+
 
 
 export default function FixedContainer() {
@@ -22,6 +23,9 @@ export default function FixedContainer() {
     const [openPassengerOptions, setOpenPassengerOptions] = React.useState(false);
     const [monitor, setMonitor] = React.useState({fromStation: null, toStation: null, date: null});
     const [loading, setLoading] = React.useState(false);
+    const [snackBarOpen, setSnackBarOpen] = React.useState(false);
+    const [snackBarMessage, setSnackBarMessage] = React.useState(null);
+    let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
 
 
     /*вызываем при нажатии на кнопку поиска поездов*/
@@ -42,29 +46,48 @@ export default function FixedContainer() {
         }
     };
 
+    let handleSetPassengers = (passengers) => {
+        let temp = monitor;
+        temp.passengers = passengers;
+        setMonitor(temp);
+    };
+
+    let handleSetPlaceFilter = (placeFilter) => {
+        let temp = monitor;
+        temp.placeFilter = placeFilter;
+        setMonitor(temp);
+    };
+
     let from = (<Asynchronous autocompleteName="Станция отправления"
                               id={"async_from"}
                               setStation={(station) => {
                                   monitor.fromStation = station;
-                              }}
-
-    />);
+                              }}/>);
 
     let to = (<Asynchronous autocompleteName="Станция прибытия"
                             id={"async_to"}
                             setStation={(station) => {
                                 monitor.toStation = station;
-                            }}
-    />);
+                            }}/>);
+
+    let handleSetTrain = (train) => {
+        let temp = monitor;
+        temp.trainNumber = train;
+        setMonitor(temp);
+    };
 
     let handleCreate = function () {
-        createMonitoring(monitor).then(console.log);
+        createMonitoring(monitor)
+            .then(console.log)
+            .then(() => setSnackBarOpen(true))
+            .then(() => setSnackBarMessage("Мониторинг успешно создан"))
+            .then(() => setTrainListOpen(null));
     };
 
     return (
         <React.Fragment>
             <Fade in={loading}>
-                <LinearProgress color="secondary" />
+                <LinearProgress color="secondary"/>
             </Fade>
             <CssBaseline/><br/>
             <Container fixed>
@@ -95,26 +118,17 @@ export default function FixedContainer() {
                     </Grid>
                 </Grid>
                 <TrainListTable trains={trainList}
-                                setTrain={(train) => {
-                                    let temp = monitor;
-                                    temp.trainNumber = train;
-                                    setMonitor(temp);
-                                }}
-                                setPassengers={(passengers) => {
-                                    let temp = monitor;
-                                    temp.passengers = passengers;
-                                    setMonitor(temp);
-                                }}
-                                setPlaceFilter={(placeFilter) => {
-                                    let temp = monitor;
-                                    temp.placeFilter = placeFilter;
-                                    setMonitor(temp);
-                                }}
+                                setTrain={handleSetTrain}
+                                setPassengers={handleSetPassengers}
+                                setPlaceFilter={handleSetPlaceFilter}
                                 openPassengerDialog={setOpenPassengerOptions}
                                 loading={loading}
                 />
                 <CaptchaPopup state={captchaPopup}
-                              close={() => {setCaptchaPopupOpen(false); setLoading(false)}}
+                              close={() => {
+                                  setCaptchaPopupOpen(false);
+                                  setLoading(false)
+                              }}
                               monitor={monitor}
                               renderTrainList={setTrainListOpen}/>
 
@@ -124,8 +138,12 @@ export default function FixedContainer() {
                     setPassengers={(passengers) => monitor.passengers = passengers}
                     setPlaceFilter={(placeFilter) => monitor.placeFilter = placeFilter}
                     onCreate={handleCreate}
+                    snack={snack}
                 />
             </Container>
+            <SnackBar open={snackBarOpen}
+                      setOpen={setSnackBarOpen}
+                      message={snackBarMessage}/>
         </React.Fragment>
     );
 }

@@ -25,8 +25,8 @@
                 ${firstName}
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <button class="dropdown-item" type="button">Account</button>
-                <button class="dropdown-item" type="button">Settings</button>
+                <button class="dropdown-item" disabled type="button">Account</button>
+                <button class="dropdown-item" disabled type="button">Settings</button>
                 <form action="/logout">
                     <button class="dropdown-item" type="submit">Logout</button>
                 </form>

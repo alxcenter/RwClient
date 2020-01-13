@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import MonitoringNavigation from './MonitorNav';
 import MonitoringList from './MonitoringList';
-import SnackBar from './SnackBar';
+import SnackBar from '../SnackBar';
 import {getMonitorings} from './MonitoringDataLoader';
 
 let navStatusRest = ['ACTIVE', 'PAUSED', 'FINISHED', 'EXPIRED', 'DELETED'];
