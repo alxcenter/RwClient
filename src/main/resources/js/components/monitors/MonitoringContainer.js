@@ -11,7 +11,7 @@ let navStatusRest = ['ACTIVE', 'PAUSED', 'FINISHED', 'EXPIRED', 'DELETED'];
 let navStatus = ['Активные', 'На паузе', 'Завершенные', 'Просроченные', 'Отмененные'];
 
 export default function SimpleContainer() {
-    const [monitoringList, setMonitoringList] = React.useState([]);
+    const [monitoringList, setMonitoringList] = React.useState(null);
     const [navIndex, setNavIndex] = React.useState(0);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState(null);
@@ -19,7 +19,7 @@ export default function SimpleContainer() {
     let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
 
     React.useEffect(() => {
-        if (monitoringList.length == 0) {
+        if (!monitoringList) {
             getMonitorings().then(setMonitoringList);
         }
     }, [monitoringList]);
@@ -31,15 +31,15 @@ export default function SimpleContainer() {
                 <MonitoringNavigation navStatus={navStatus}
                                       setNavIndex={setNavIndex}/>
                 <Typography component="div">
-                    <MonitoringList
+                    {monitoringList && <MonitoringList
                         monitoringList={monitoringList.filter(x => x.status == navStatusRest[navIndex])}
                         setMonitoringList={setMonitoringList}
-                        snack={snack}/>
+                        snack={snack}/>}
                 </Typography>
             </Container>
             <SnackBar open={snackBarOpen}
                       setOpen={setSnackBarOpen}
-            message={snackBarMessage}/>
+                      message={snackBarMessage}/>
         </React.Fragment>
     );
 }

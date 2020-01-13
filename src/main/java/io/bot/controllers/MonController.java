@@ -16,6 +16,6 @@ public class MonController {
     @GetMapping
     @RequestMapping("monitoring")
     public String getAllMonitoring() {
-        return "react";
+        return "monitors";
     }
 }
