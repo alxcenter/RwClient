@@ -1,25 +1,23 @@
 package io.bot.uz;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
-@Component
-@SessionScope
 public class RequestNtw {
 
-    @Autowired
+    public RequestNtw(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     private RestTemplate restTemplate;
 
     private final String AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
@@ -34,6 +32,7 @@ public class RequestNtw {
         ResponseEntity<String> responseEntity = getResponseEntity(searchBy, post, cookies);
         List<String> list = responseEntity.getHeaders().get("set-cookie");
         String coo = this.sessionCookies == null ? parseCookies(list) : this.sessionCookies;
+        System.out.println(coo);
         return new String[]{responseEntity.getBody(), coo};
     }
 

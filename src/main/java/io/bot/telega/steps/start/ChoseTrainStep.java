@@ -31,6 +31,7 @@ import static io.bot.telega.Emoji.*;
 public class ChoseTrainStep extends Stepper {
 
     @Autowired
+    @Qualifier("telega")
     TrainSearch trainSearch;
     int progress = 1;
     boolean wasSearchSuccess = false;
@@ -42,6 +43,7 @@ public class ChoseTrainStep extends Stepper {
     private int trainListMessageId;
 
     @Autowired
+    @Qualifier("telega")
     RequestNtw request;
 
 //    public ChoseTrainStep(Bot bot) {
@@ -60,13 +62,13 @@ public class ChoseTrainStep extends Stepper {
 
 
     private void callBackFlow() {
-        if (call_data.equals("accept")){
-            if (tempTrainNumber!=null){
+        if (call_data.equals("accept")) {
+            if (tempTrainNumber != null) {
                 actionForAccept();
                 progress = 3;
                 isFull = true;
             }
-        }else {
+        } else {
             modifyMarkUp(call_data);
             String answer = "Выбран поезд: *" + call_data + "*.\nНажми \"Подтвердить\" или выбери другой поезд.";
             editMessage(answer, inlineKeyboardMarkup);
@@ -134,8 +136,6 @@ public class ChoseTrainStep extends Stepper {
     }
 
 
-
-
     private void sendTrainList(List<Train> trains) {
         StringBuilder builder = new StringBuilder();
         trains.stream().forEach(x -> builder.append(getFormattedTrain(x)));
@@ -190,43 +190,43 @@ public class ChoseTrainStep extends Stepper {
         for (int i = 0; i < keyboard.size(); i++) {
             for (int j = 0; j < keyboard.get(i).size(); j++) {
                 InlineKeyboardButton inlineKeyboardButton = keyboard.get(i).get(j);
-                if (inlineKeyboardButton.getCallbackData().equals("accept")){
+                if (inlineKeyboardButton.getCallbackData().equals("accept")) {
                     hasAccept = true;
                 }
                 if (inlineKeyboardButton.getCallbackData().equals(trainNum)) {
                     inlineKeyboardButton.setText(inlineKeyboardButton.getText().replaceAll(WHITE_CIRCLE, ""));
                     inlineKeyboardButton.setText(inlineKeyboardButton.getText().replaceAll(RADIO_BUTTON, ""));
                     inlineKeyboardButton.setText(RADIO_BUTTON + inlineKeyboardButton.getText());
-                }else if (inlineKeyboardButton.getText().contains(RADIO_BUTTON)) {
+                } else if (inlineKeyboardButton.getText().contains(RADIO_BUTTON)) {
                     inlineKeyboardButton.setText(inlineKeyboardButton.getText().replaceAll(RADIO_BUTTON, WHITE_CIRCLE));
                 }
             }
         }
-        if (!hasAccept){
+        if (!hasAccept) {
             addAcceptButton();
         }
     }
 
-    private void addAcceptButton(){
+    private void addAcceptButton() {
         ArrayList<InlineKeyboardButton> acceptButton = new ArrayList<>();
         acceptButton.add(new InlineKeyboardButton().setCallbackData("accept").setText("Подтвердить"));
         inlineKeyboardMarkup.getKeyboard().add(acceptButton);
     }
 
-    private void actionForAccept(){
+    private void actionForAccept() {
         monitoring.setTrainNumber(tempTrainNumber);
         modifyToSuccess();
     }
 
-    private void modifyToSuccess(){
+    private void modifyToSuccess() {
         removeMessage(trainListMessageId);
         editMessage(LOCOMOTIVE + "*Выбран поезд " + getFormattedMonitoring(), new InlineKeyboardMarkup());
     }
 
-    private String getFormattedMonitoring(){
+    private String getFormattedMonitoring() {
         Train train = null;
-        for (Train x: trainList) {
-            if (x.getNum().equals(monitoring.getTrainNumber())){
+        for (Train x : trainList) {
+            if (x.getNum().equals(monitoring.getTrainNumber())) {
                 train = x;
             }
         }

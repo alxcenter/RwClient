@@ -17,8 +17,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class StationService {
 
-    @Autowired
+//    @Autowired
     StationSearcher stationSearcher;
+
+    public StationService(StationSearcher stationSearcher) {
+        this.stationSearcher = stationSearcher;
+    }
 
     @Autowired
     StationRepo stationRepo;

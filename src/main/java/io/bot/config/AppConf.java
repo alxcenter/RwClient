@@ -13,19 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Configuration
-//@ComponentScan({"io.bot.controllers", "io.bot.repositories", "io.bot.service", "io.bot.uz"})
-//@Import(TelegaConf.class)
-//@Import(DbConfig.class)
-//@EnableWebMvc
 public class AppConf {
-
-    @Bean
-    public RestTemplate getRestTemplate(){
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters()
-                .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
-        return restTemplate;
-    }
 
     @Bean
     @Qualifier("sess")

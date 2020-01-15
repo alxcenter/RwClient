@@ -8,6 +8,7 @@ import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -21,21 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 
 @Component
-//@Scope("request")
+@SessionScope
 public class TelegramValidation {
-
-    public static void main(String[] args) {
-        long l = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        System.out.println(l);
-        System.out.println(new Date().getTime());
-        System.out.println(1576576809L);
-    }
-
-    private boolean validateAuthDate(String authDateString){
-        long authDate = Long.parseLong(authDateString);
-        long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        return (currentTime - authDate) < 86400;
-    }
 
     private String BOT_TOKEN = "869759161:AAH3W6MAoiz2qMbUoQqZ7-_-QgqmIE-2JLA";
 
@@ -51,6 +39,12 @@ public class TelegramValidation {
             e.printStackTrace();
         }
         return encodedHash.equals(authPayload.get("hash"));
+    }
+
+    private boolean validateAuthDate(String authDateString){
+        long authDate = Long.parseLong(authDateString);
+        long currentTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        return (currentTime - authDate) < 86400;
     }
 
     private String generateDataCheckString(Map<String, String> authPayload){

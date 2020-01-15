@@ -2,28 +2,15 @@ package io.bot.config;
 
 import io.bot.telega.Bot;
 import io.bot.telega.MessagePool;
-import io.bot.uz.RequestNtw;
-import io.bot.uz.StationSearcher;
-import io.bot.uz.TrainSearch;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-/*
-*
-* отключен из-за проблем со скоупом...
-* телега не в mvc контейнере
-*
-* */
-
-
-//@Configuration
-//@ComponentScan("io.bot.telega")
+@Configuration
+@ComponentScan("io.bot.telega")
 public class TelegaConf {
     @Bean
     public Bot getBot(){
@@ -44,5 +31,4 @@ public class TelegaConf {
         messagePool.startSending();
         return messagePool;
     }
-
 }

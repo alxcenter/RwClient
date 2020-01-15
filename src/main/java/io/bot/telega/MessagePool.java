@@ -10,7 +10,6 @@ import java.util.Queue;
  * Created by a.zaitsev on 14.05.2018.
  */
 
-//@Component
 public class MessagePool{
     Bot bot;
     long chatId = 167944354L;

@@ -6,6 +6,7 @@ import io.bot.service.StationService;
 import io.bot.telega.steps.Stepper;
 import io.bot.uz.StationSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -30,6 +31,7 @@ import static java.lang.Math.toIntExact;
 public class ChoseStationStep extends Stepper {
 
     @Autowired
+    @Qualifier("telega")
     StationService stationService;
 
     private String fromStationSet = STATION + " *Станция отправления:* ";
