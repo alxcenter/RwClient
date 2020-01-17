@@ -17,11 +17,6 @@ export default function CaptchaPopup(props) {
         setOpen(props.state)
     });
 
-    // React.useEffect(() => {
-        // if (open) resolveCaptcha(props.monitor)
-        //     .then((as) => console.log(as));
-    // }, [open]);
-
     const handleChange = (event) => {
         text = event.target.value;
     };

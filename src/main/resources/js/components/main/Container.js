@@ -25,8 +25,8 @@ export default function FixedContainer() {
     const [loading, setLoading] = React.useState(false);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState(null);
+    const [autocompleteState, setAutocompleteState] = React.useState({from: null, to: null, ver: 0});
     let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
-
 
     /*вызываем при нажатии на кнопку поиска поездов*/
     let handleSearchButton = function () {
@@ -60,12 +60,20 @@ export default function FixedContainer() {
 
     let from = (<Asynchronous autocompleteName="Станция отправления"
                               id={"async_from"}
+                              version={autocompleteState.ver}
+                              state={autocompleteState.from}
+                              setState={(state) => {autocompleteState.from = state}}
+                              station={monitor.fromStation}
                               setStation={(station) => {
                                   monitor.fromStation = station;
                               }}/>);
 
     let to = (<Asynchronous autocompleteName="Станция прибытия"
                             id={"async_to"}
+                            version={autocompleteState.ver}
+                            state={autocompleteState.to}
+                            setState={(state) => {autocompleteState.to = state}}
+                            station={monitor.toStation}
                             setStation={(station) => {
                                 monitor.toStation = station;
                             }}/>);
@@ -84,6 +92,19 @@ export default function FixedContainer() {
             .then(() => setTrainListOpen(null));
     };
 
+    let handleChangeStations = () => {
+        console.log("start changing v." + autocompleteState.ver);
+        let mon = Object.assign({}, monitor);
+        let autoState = Object.assign({}, autocompleteState);
+        autoState.from = autocompleteState.to;
+        autoState.to = autocompleteState.from;
+        autoState.ver = autocompleteState.ver+1;
+        setAutocompleteState(autoState);
+        mon.fromStation = monitor.toStation;
+        mon.toStation = monitor.fromStation;
+        setMonitor(mon);
+    };
+
     return (
         <React.Fragment>
             <Fade in={loading}>
@@ -97,7 +118,8 @@ export default function FixedContainer() {
                     </Grid>
                     <Grid item>
                         <IconButton color="secondary" aria-label="Change directions" disableFocusRipple={true}
-                                    disableRipple={true}>
+                                    disableRipple={true}
+                        onClick={handleChangeStations}>
                             <SwapHorizOutlinedIcon color={"secondary"} fontSize={"large"}/>
                         </IconButton>
                     </Grid>

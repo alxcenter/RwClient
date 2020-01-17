@@ -14,63 +14,77 @@ export default function Asynchronous(props) {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
     const [timer, setTimer] = React.useState(null);
-    const [inputValue, setInputValue] = React.useState('lo');
-    const loading = open && options.length === 0 && inputValue != null;
+    const [inputValue, setInputValue] = React.useState('');
+    const [ver, setVer] = React.useState(0);
+    const loading = open && options.length === 0 && inputValue != '';
 
     const handleInputChange = event => {
+        // console.log(`inputValue is = ${inputValue}`);
+        setInputValue(event.target.value);
+        console.log(`inputValue is = ${event.target.value}`);
+        let text = event.target.value;
+        props.setState({options: options, text: text, ver: ver});
         new Promise((resolve) => {
-            if (timer) {
-                clearTimeout(timer)
-            }
-
-            let text = event.target.value;
-            let t = setTimeout(() => resolve(text), 1000);
+            timer ? clearTimeout(timer) : undefined;
+            let t = setTimeout(() => resolve(getStations(text)), 1000);
             setTimer(t);
         })
-            .then((obj) => {
-                setInputValue(obj);
-            });
+            .then(props.setState({options: options, text: text, ver: ver}));
     };
 
-    const handleAutocompleteChange = function(event, value){
-        props.setStation(value);
+    const handleAutocompleteChange = function (event, value) {
+        if (value) {
+            props.setStation(value);
+            setInputValue(value.stationName);
+            props.setState({options: options, text: value.stationName, ver: ver});
+        }
     };
 
-
+    const handleAutocompleteInputChange = (event, value, reason) => {
+        if (reason == "clear") {
+            props.setState({options: [], text: '', ver: ver});
+            props.setStation(null);
+            setInputValue('');
+            setOptions([]);
+        }
+    };
 
     React.useEffect(() => {
-        let active = true;
-
-        if (inputValue.length < 3) {
-            setOptions([]);
-            return undefined;
-        }
-        (async () => {
-            const response = await fetch(`http://telega704.io/api/stations/find?name=${inputValue}`);
-            await sleep(1e3); // For demo purposes.
-            const stations = await response.json();
-            if (active) {
-                setOptions(stations);
+        console.log(`${props.autocompleteName} inputvalue is = ${inputValue}`);
+        if (props.state!=null){
+            console.log(`${props.state.ver} autocomplete ver.${ver}`);
+            if (props.version!=ver){
+                console.log('do changes');
+                setInputValue(props.state.text);
+                setOptions(props.state.options);
+                setVer(props.version);
             }
-        })();
+        }
+    });
 
-        return () => {
-            active = false;
-        };
-    }, [inputValue]);
+
+    const getStations = (stationName) => {
+        if (stationName.length < 3) {
+            setOptions([]);
+        } else {
+            (async () => {
+                await sleep(1e3);
+                await fetch(`http://telega704.io/api/stations/find?name=${stationName}`)
+                    .then((response) => response.json())
+                    .then(setOptions);
+            })();
+        }
+    };
 
     return (
         <Autocomplete
-            onOpen={() => {
-                setOpen(true);
-            }}
-            onClose={() => {
-                setOpen(false);
-            }}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
             open={open}
             id={props.id}
             style={{width: 300}}
             filterOptions={x => x}
+            inputValue={inputValue}
             options={options}
             getOptionLabel={option => option.stationName}
             autoComplete={false}
@@ -94,6 +108,7 @@ export default function Asynchronous(props) {
                 />
             )}
             onChange={handleAutocompleteChange}
+            onInputChange={handleAutocompleteInputChange}
         />
     );
 }
