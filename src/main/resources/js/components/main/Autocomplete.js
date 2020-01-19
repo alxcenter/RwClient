@@ -69,7 +69,7 @@ export default function Asynchronous(props) {
         } else {
             (async () => {
                 await sleep(1e3);
-                await fetch(`http://telega704.io/api/stations/find?name=${stationName}`)
+                await fetch(`/api/stations/find?name=${stationName}`)
                     .then((response) => response.json())
                     .then(setOptions);
             })();

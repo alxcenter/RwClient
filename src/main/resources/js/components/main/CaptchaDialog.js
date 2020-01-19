@@ -12,7 +12,7 @@ export default function CaptchaPopup(props) {
     const [open, setOpen] = React.useState(false);
     const [attempt, setAttempt] = React.useState(0);
     let text = '';
-    let captchaUrl = `http://telega704.io/captcha?${new Date().getMilliseconds()}`;
+    let captchaUrl = `/captcha?${new Date().getMilliseconds()}`;
     React.useEffect(() => {
         setOpen(props.state)
     });
