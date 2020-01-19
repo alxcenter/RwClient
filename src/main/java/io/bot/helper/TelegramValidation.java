@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @SessionScope
 public class TelegramValidation {
 
-    @Value("${telega.authToken}")
+    @Value("${telega.apiToken}")
     private String BOT_TOKEN;
     public boolean validate(Map<String, String> authPayload){
         String auth_date = authPayload.get("auth_date");

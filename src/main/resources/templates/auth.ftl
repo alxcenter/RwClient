@@ -15,7 +15,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Sign In</h5>
                                 <p class="card-text"></p>
-                                <@telega.telegaAuth/>
+                                <@telega.telegaAuth "${telega_name}"/>
                                 <p class="card-text"><small class="text-muted">Sign in please</small></p>
                             </div>
                         </div>

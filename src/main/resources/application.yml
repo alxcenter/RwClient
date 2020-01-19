@@ -6,14 +6,13 @@ spring:
       ddl-auto: update
     show-sql: true
 server:
-  port: ${PORT}
+  port: ${PORT:80}
   servlet:
     session:
       timeout: 100m
 telega:
   name: ${telega_name}
   apiToken: ${telega_apiToken}
-  authToken: ${telega_authToken}
 ---
 spring:
   profiles: dev

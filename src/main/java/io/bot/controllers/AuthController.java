@@ -4,10 +4,12 @@ import io.bot.helper.TelegramValidation;
 import io.bot.model.User;
 import io.bot.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
@@ -27,7 +29,8 @@ public class AuthController {
     private UserRepo userRepo;
 
     @GetMapping
-    public String auth(@AuthenticationPrincipal User user) {
+    public String auth(@AuthenticationPrincipal User user, Model model, @Value("${telega.name}") String botName) {
+        model.addAttribute("telega_name", botName);
         return user==null?"auth":"redirect:/";
     }
 
