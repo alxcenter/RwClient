@@ -1,1 +1,1 @@
-java -jar target/RwClient-1.0-SNAPSHOT.jar
+web: java -jar target/RwClient-1.0-SNAPSHOT.jar
