@@ -1,1 +1,1 @@
-web: java -jar target/RwClient-1.0-SNAPSHOT.jar
+web: java -Dspring.profiles.active=prod -jar target/RwClient-1.0-SNAPSHOT.jar
