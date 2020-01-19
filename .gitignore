@@ -6,3 +6,5 @@
 /src/test/*
 *.iml
 package-lock.json
+
+*.bundle.js
