@@ -35,7 +35,7 @@
                     <version>1.9.1</version>
                     <configuration>
                         <!--<configuration>-->
-                            <nodeVersion>latest</nodeVersion>
+                            <nodeVersion>v10.18.1</nodeVersion>
                             <npmVersion>6.4.1</npmVersion>
                         <!--</configuration>-->
                         <installDirectory>target</installDirectory>

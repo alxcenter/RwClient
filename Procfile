@@ -1,0 +1,1 @@
+java -jar target/RwClient-1.0-SNAPSHOT.jar
