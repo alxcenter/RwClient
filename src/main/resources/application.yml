@@ -26,9 +26,9 @@ spring:
 spring:
   profiles: prod
   datasource:
-    url: ${datasource.url}
-    username: ${datasource.username}
-    password: ${datasource.password}
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
     properties:
