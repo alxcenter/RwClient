@@ -1,5 +1,5 @@
 export async function resolveCaptcha(solved) {
-    return fetch('http://telega704.io/api/trainCaptcha',
+    return fetch('/api/trainCaptcha',
         {
             method: 'POST',
             headers: {
@@ -14,7 +14,7 @@ export async function resolveCaptcha(solved) {
 }
 
 export async function getTrainList(moni) {
-    return fetch(`http://telega704.io/api/train`, {
+    return fetch(`/api/train`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -28,7 +28,7 @@ export async function getTrainList(moni) {
 }
 
 export async function  createMonitoring(moni) {
-    return fetch(`http://telega704.io/api/monitorings`, {
+    return fetch(`/api/monitorings`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
