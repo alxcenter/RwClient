@@ -11,9 +11,9 @@ server:
     session:
       timeout: 100m
 telega:
-  name: ${telega.name}
-  apiToken: ${telega.apiToken}
-  authToken: ${telega.authToken}
+  name: ${telega_name}
+  apiToken: ${telega_apiToken}
+  authToken: ${telega_authToken}
 ---
 spring:
   profiles: dev
