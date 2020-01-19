@@ -6,23 +6,39 @@ import io.bot.uz.TrainSearch;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class WebClientBeans {
+
+    private final int TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
+
 
     @Bean
     @SessionScope
     @Primary
     public RestTemplate getRestTemplateForWeb(){
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate(getRequestFactory());
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         return restTemplate;
+    }
+
+    private ClientHttpRequestFactory getRequestFactory() {
+        HttpComponentsClientHttpRequestFactory factory =
+                new HttpComponentsClientHttpRequestFactory();
+
+        factory.setReadTimeout(TIMEOUT);
+        factory.setConnectTimeout(TIMEOUT);
+        factory.setConnectionRequestTimeout(TIMEOUT);
+        return factory;
     }
 
     @Bean
