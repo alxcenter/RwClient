@@ -6,7 +6,7 @@ module.exports = {
         main: ['./src/main/resources/js/app.js'],
         monitor: ['./src/main/resources/js/monitoringApp.js']},
     cache: true,
-    mode: 'development',
+    mode: 'production',
     output: {
         path: __dirname,
         filename: './src/main/resources/static/built/[name].bundle.js'
