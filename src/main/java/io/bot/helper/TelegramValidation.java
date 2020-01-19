@@ -6,6 +6,7 @@ import io.bot.telega.Bot;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
@@ -25,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 @SessionScope
 public class TelegramValidation {
 
-    private String BOT_TOKEN = "869759161:AAH3W6MAoiz2qMbUoQqZ7-_-QgqmIE-2JLA";
-
+    @Value("${telega.authToken}")
+    private String BOT_TOKEN;
     public boolean validate(Map<String, String> authPayload){
         String auth_date = authPayload.get("auth_date");
         if (!validateAuthDate(auth_date)) {return false;}

@@ -20,8 +20,13 @@ public class Bot extends TelegramLongPollingBot {
     @Autowired
     private UpdateManager um;
 
-    private static final String BOT_USER_NAME = getProperty("name");
-    private static final String BOT_TOKEN = getProperty("key");
+    private String BOT_USER_NAME;
+    private String BOT_TOKEN;
+
+    public Bot(String BOT_USER_NAME, String BOT_TOKEN) {
+        this.BOT_USER_NAME = BOT_USER_NAME;
+        this.BOT_TOKEN = BOT_TOKEN;
+    }
 
     @Override
     public void onUpdateReceived(Update update) {

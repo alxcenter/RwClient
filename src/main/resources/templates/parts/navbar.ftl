@@ -15,9 +15,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="/me/monitoring">Monitoring list</a>
             </li>
-            <li class="nav-item">
+            <#--<li class="nav-item">
                 <a class="nav-link disabled" href="/plans">Plans</a>
-            </li>
+            </li>-->
         </ul>
         <div class="btn-group">
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"

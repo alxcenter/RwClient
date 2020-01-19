@@ -1,14 +1,38 @@
 spring:
+  profiles:
+    active: dev
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-  datasource:
-    url: ${datasource.url}
-    username: ${datasource.username}
-    password: ${datasource.password}
 server:
   port: 80
   servlet:
     session:
       timeout: 100m
+telega:
+  name: ${telega.name}
+  apiToken: ${telega.apiToken}
+  authToken: ${telega.authToken}
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/rwclient?serverTimezone=UTC
+    username: root
+    password: 1
+
+---
+spring:
+  profiles: prod
+  datasource:
+    url: ${datasource.url}
+    username: ${datasource.username}
+    password: ${datasource.password}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    properties:
+     hibernate:
+      jdbc:
+       lob:
+        non_contextual_creation: true

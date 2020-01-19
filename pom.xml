@@ -23,6 +23,11 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <profiles>
+                            <profile>dev</profile>
+                        </profiles>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
@@ -82,6 +87,11 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
 
