@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 
 /**
@@ -42,17 +39,6 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public String getBotToken() {
         return BOT_TOKEN;
-    }
-
-    private static String getProperty(String a) {
-        Properties property = new Properties();
-        try (FileInputStream fis = new FileInputStream("src/main/resources/telega.properties")) {
-            property.load(fis);
-        } catch (IOException e) {
-            System.out.println("Файл настроек отсутствует. " + e.getMessage());
-        }
-        String result = property.getProperty(a);
-        return result;
     }
 
     UpdateManager getUpdateManagerForUpdate(Update update) {

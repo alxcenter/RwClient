@@ -9,7 +9,7 @@
                 <div class="card mt-3 border-0 text-center" style="max-width: 540px;">
                     <div class="row mt-5 no-gutters">
                         <div class="col-md-4">
-                            <img src="/static/img/auth.svg" class="card-img mt-2" alt="Logo">
+                            <img src="/static/img/auth.svg" height="128px" class="card-img mt-2" alt="Logo">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">

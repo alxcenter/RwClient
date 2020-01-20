@@ -24,7 +24,7 @@
                     aria-expanded="false">
                 ${firstName}
             </button>
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-sm-right">
                 <button class="dropdown-item" disabled type="button">Account</button>
                 <button class="dropdown-item" disabled type="button">Settings</button>
                 <form action="/logout">

@@ -28,19 +28,12 @@ public class SearchController {
     Map map;
 
     @PostMapping("/train")
-    public List<Train> getTrainList(@RequestBody Monitoring monitoring,
-                                    HttpServletRequest request) throws RailWayException {
+    public List<Train> getTrainList(@RequestBody Monitoring monitoring) throws RailWayException {
         map.put("currentMonitoring", monitoring);
-        List<Train> trains = null;
-        try {
-            trains = trainSearch.getTrains(
+        List<Train> trains = trainSearch.getTrains(
                     String.valueOf(monitoring.getFromStation().getStationCode()),
                     String.valueOf(monitoring.getToStation().getStationCode()),
-                    monitoring.getDate()
-            );
-        } catch (CaptchaException e) {
-            throw e;
-        }
+                    monitoring.getDate());
         return trains;
     }
 
