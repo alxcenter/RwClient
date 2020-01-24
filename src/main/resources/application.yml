@@ -13,6 +13,8 @@ server:
 telega:
   name: ${telega_name}
   apiToken: ${telega_apiToken}
+rw:
+  proxy: ${rw_proxy}
 ---
 spring:
   profiles: dev

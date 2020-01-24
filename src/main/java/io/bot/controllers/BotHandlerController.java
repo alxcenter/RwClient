@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 public class BotHandlerController {
 
-    @ExceptionHandler(CaptchaException.class)
+//    @ExceptionHandler(CaptchaException.class)
     ResponseEntity<ApiError> captcha(CaptchaException ex) {
         ApiError apiError = new ApiError()
                 .setMessage("captcha")

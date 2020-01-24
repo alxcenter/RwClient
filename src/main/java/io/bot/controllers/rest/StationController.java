@@ -1,11 +1,13 @@
 package io.bot.controllers.rest;
 
 import io.bot.exceptions.StationNotFoundException;
+import io.bot.helper.KeyboardSwitcher;
 import io.bot.model.Station;
 import io.bot.repositories.StationRepo;
 import io.bot.service.StationService;
 import io.bot.uz.StationSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,9 @@ public class StationController {
     @Autowired
     StationService stationService;
 
+    @Autowired
+    KeyboardSwitcher keyboardSwitcher;
+
     @PostMapping("/stations")
     public Station createStation(@RequestBody Station station){
         return stationRepo.findById(station.getStationCode())
@@ -31,7 +36,8 @@ public class StationController {
 
     @GetMapping("/stations/find")
     public List<Station> findStation(@RequestParam(required = false) String name){
-        return stationService.getStations(name);
+        String s = keyboardSwitcher.changheKeyboardLayout(name.toLowerCase());
+        return stationService.getStations(s);
     }
 
     @GetMapping("/stations/{id}")

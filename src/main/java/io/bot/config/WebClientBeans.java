@@ -1,45 +1,51 @@
 package io.bot.config;
 
+import io.bot.helper.proxy.ProxyManager;
+import io.bot.helper.proxy.RwProxy;
 import io.bot.uz.RequestNtw;
 import io.bot.uz.StationSearcher;
 import io.bot.uz.TrainSearch;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.nio.charset.Charset;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class WebClientBeans {
 
-    private final int TIMEOUT = (int) TimeUnit.SECONDS.toMillis(10);
-
+    @Autowired
+    ProxyManager proxyManager;
 
     @Bean
     @SessionScope
     @Primary
     public RestTemplate getRestTemplateForWeb(){
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         RestTemplate restTemplate = new RestTemplate(getRequestFactory());
+        restTemplate.setRequestFactory(requestFactory);
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         return restTemplate;
     }
 
     private ClientHttpRequestFactory getRequestFactory() {
-        HttpComponentsClientHttpRequestFactory factory =
-                new HttpComponentsClientHttpRequestFactory();
-
-        factory.setReadTimeout(TIMEOUT);
-        factory.setConnectTimeout(TIMEOUT);
-        factory.setConnectionRequestTimeout(TIMEOUT);
-        return factory;
+        RwProxy p = proxyManager.getProxy();
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(p.getHost(), p.getPort()));
+        requestFactory.setProxy(proxy);
+        return requestFactory;
     }
+
+
 
     @Bean
     @SessionScope

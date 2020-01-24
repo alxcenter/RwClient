@@ -19,9 +19,10 @@ public class MessagePool{
     }
 
     private static Queue<String> messages = new PriorityQueue<String>();
+
     public void startSending(){
-        messages.add("Test");
-        SendMessage sendMessage = new SendMessage(chatId, "StartSearching");
+//        messages.add("Test");
+        SendMessage sendMessage = new SendMessage(chatId, "Client was run successfully");
         MonitorMessage monitorMessage = new MonitorMessage();
         monitorMessage.start();
         try {
