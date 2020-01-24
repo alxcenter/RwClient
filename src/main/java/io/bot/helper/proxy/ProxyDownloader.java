@@ -75,7 +75,7 @@ public class ProxyDownloader {
     }
 
     private boolean validateAnonymousProxy(String pr) {
-//        if (pr.contains("-N")) return false;
+        if (pr.contains("-N")) return false;
         return true;
     }
 
