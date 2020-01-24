@@ -60,6 +60,7 @@ export default function FixedContainer() {
 
     let from = (<Asynchronous autocompleteName="Станция отправления"
                               id={"async_from"}
+                              snack={snack}
                               version={autocompleteState.ver}
                               state={autocompleteState.from}
                               setState={(state) => {autocompleteState.from = state}}
@@ -91,6 +92,7 @@ export default function FixedContainer() {
             .then(() => setSnackBarMessage("Мониторинг успешно создан"))
             .then(() => setTrainListOpen(null));
     };
+
 
     let handleChangeStations = () => {
         console.log("start changing v." + autocompleteState.ver);

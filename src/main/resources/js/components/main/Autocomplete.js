@@ -51,9 +51,9 @@ export default function Asynchronous(props) {
 
     React.useEffect(() => {
         console.log(`${props.autocompleteName} inputvalue is = ${inputValue}`);
-        if (props.state!=null){
+        if (props.state != null) {
             console.log(`${props.state.ver} autocomplete ver.${ver}`);
-            if (props.version!=ver){
+            if (props.version != ver) {
                 console.log('do changes');
                 setInputValue(props.state.text);
                 setOptions(props.state.options);
@@ -70,8 +70,17 @@ export default function Asynchronous(props) {
             (async () => {
                 await sleep(1e3);
                 await fetch(`/api/stations/find?name=${stationName}`)
-                    .then((response) => response.json())
-                    .then(setOptions);
+                    .then((response) => {
+                            if (response.status == 500) {throw new Error(response.json().message);}
+                            else if (response.status == 408) {throw new Error(response.json().message);}
+                            else {return response.json();}
+                        }
+                    )
+                    .then(setOptions)
+                    .catch(e => {
+                        props.snack.setSnackBarMessage("Отпали прокси.");
+                        props.snack.setSnackBarOpen(true);
+                    });
             })();
         }
     };
