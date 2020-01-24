@@ -29,9 +29,7 @@ public class WebClientBeans {
     @SessionScope
     @Primary
     public RestTemplate getRestTemplateForWeb(){
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         RestTemplate restTemplate = new RestTemplate(getRequestFactory());
-        restTemplate.setRequestFactory(requestFactory);
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         return restTemplate;
