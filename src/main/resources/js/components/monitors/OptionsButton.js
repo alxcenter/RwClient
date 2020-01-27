@@ -4,11 +4,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Edit from '@material-ui/icons/Edit';
 import Delete from '@material-ui/icons/Delete';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
-import PauseCircleFilledIcon from '@material-ui/icons/PauseCircleFilled';
 import {deleteMonitoring} from "./MonitoringDataLoader";
 import DeleteConfirmPopup from "./DeleteConfirmPopup";
 
