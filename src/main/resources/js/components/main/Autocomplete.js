@@ -21,7 +21,7 @@ export default function Asynchronous(props) {
     const handleInputChange = event => {
         // console.log(`inputValue is = ${inputValue}`);
         setInputValue(event.target.value);
-        console.log(`inputValue is = ${event.target.value}`);
+        // console.log(`inputValue is = ${event.target.value}`);
         let text = event.target.value;
         props.setState({options: options, text: text, ver: ver});
         new Promise((resolve) => {
@@ -40,6 +40,16 @@ export default function Asynchronous(props) {
         }
     };
 
+    const handleSetOptions = (opt) => {
+        if (opt.length == 0) {
+            console.log("Нет такой станции");
+            props.snack("Нет такой станции");
+            setOpen(false);
+        } else {
+            setOptions(opt);
+        }
+    };
+
     const handleAutocompleteInputChange = (event, value, reason) => {
         if (reason == "clear") {
             props.setState({options: [], text: '', ver: ver});
@@ -52,7 +62,7 @@ export default function Asynchronous(props) {
     React.useEffect(() => {
         console.log(`${props.autocompleteName} inputvalue is = ${inputValue}`);
         if (props.state != null) {
-            console.log(`${props.state.ver} autocomplete ver.${ver}`);
+            // console.log(`${props.state.ver} autocomplete ver.${ver}`);
             if (props.version != ver) {
                 console.log('do changes');
                 setInputValue(props.state.text);
@@ -71,16 +81,17 @@ export default function Asynchronous(props) {
                 await sleep(1e3);
                 await fetch(`/api/stations/find?name=${stationName}`)
                     .then((response) => {
-                            if (response.status == 500) {throw new Error(response.json().message);}
-                            else if (response.status == 408) {throw new Error(response.json().message);}
-                            else {return response.json();}
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            response.json()
+                                .then(errObject => {
+                                    console.log(errObject.message);
+                                    props.snack("Отпали прокси." + errObject.message);
+                                })
                         }
-                    )
-                    .then(setOptions)
-                    .catch(e => {
-                        props.snack.setSnackBarMessage("Отпали прокси.");
-                        props.snack.setSnackBarOpen(true);
-                    });
+                    })
+                    .then(handleSetOptions);
             })();
         }
     };

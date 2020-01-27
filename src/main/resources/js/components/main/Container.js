@@ -9,12 +9,11 @@ import ContainedButtons from './SearchButton';
 import Grid from '@material-ui/core/Grid';
 import TrainListTable from './trains/TrainTable';
 import CaptchaPopup from './CaptchaDialog';
-import {getTrainList, createMonitoring} from './trains/TrainSearcher'
+import {createMonitoring, getTrainList} from './trains/TrainSearcher'
 import AddUsersDialog from "./passengers/AddUsersDialog";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fade from "@material-ui/core/Fade";
 import SnackBar from '../SnackBar';
-
 
 
 export default function FixedContainer() {
@@ -26,7 +25,6 @@ export default function FixedContainer() {
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState(null);
     const [autocompleteState, setAutocompleteState] = React.useState({from: null, to: null, ver: 0});
-    let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
 
     /*вызываем при нажатии на кнопку поиска поездов*/
     let handleSearchButton = function () {
@@ -36,7 +34,6 @@ export default function FixedContainer() {
             alert("Введите станцию прибытия");
         } else {
             setLoading(true);
-
             getTrainList(monitor)
                 .then(setTrainListOpen)
                 .then(() => setLoading(false))
@@ -52,6 +49,11 @@ export default function FixedContainer() {
         setMonitor(temp);
     };
 
+    let handleSetSnackBarMessage = (message) => {
+      setSnackBarMessage(message);
+      setSnackBarOpen(message);
+    };
+
     let handleSetPlaceFilter = (placeFilter) => {
         let temp = monitor;
         temp.placeFilter = placeFilter;
@@ -60,7 +62,7 @@ export default function FixedContainer() {
 
     let from = (<Asynchronous autocompleteName="Станция отправления"
                               id={"async_from"}
-                              snack={snack}
+                              snack={handleSetSnackBarMessage}
                               version={autocompleteState.ver}
                               state={autocompleteState.from}
                               setState={(state) => {autocompleteState.from = state}}
@@ -71,6 +73,7 @@ export default function FixedContainer() {
 
     let to = (<Asynchronous autocompleteName="Станция прибытия"
                             id={"async_to"}
+                            snack={handleSetSnackBarMessage}
                             version={autocompleteState.ver}
                             state={autocompleteState.to}
                             setState={(state) => {autocompleteState.to = state}}
@@ -162,7 +165,7 @@ export default function FixedContainer() {
                     setPassengers={(passengers) => monitor.passengers = passengers}
                     setPlaceFilter={(placeFilter) => monitor.placeFilter = placeFilter}
                     onCreate={handleCreate}
-                    snack={snack}
+                    snack={handleSetSnackBarMessage}
                 />
             </Container>
             <SnackBar open={snackBarOpen}

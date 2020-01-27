@@ -22,7 +22,7 @@ export async function getTrainList(moni) {
         body: JSON.stringify(moni)
     })
         .then((response) => {
-            if (response.status == 409) throw new Error('captcha');
+            if (response.status == 409) throw new CaptchaEx('captcha');
             else return response.json();
         });
 }

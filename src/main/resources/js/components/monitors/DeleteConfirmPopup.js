@@ -23,8 +23,7 @@ export default function AlertDialog(props) {
             .then(handleClose)
             .then(() => getMonitorings())
             .then(props.setMonitoringList)
-            .then(props.snack.setSnackBarOpen(true))
-            .then(props.snack.setSnackBarMessage('Пользователь удален'));
+            .then(props.snack("Пользователь удален"));
 
     return (
         <div>

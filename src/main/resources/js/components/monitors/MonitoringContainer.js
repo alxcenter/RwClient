@@ -16,7 +16,10 @@ export default function SimpleContainer() {
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState(null);
 
-    let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
+    let handleSetSnackBarMessage = (message) => {
+        setSnackBarMessage(message);
+        setSnackBarOpen(message);
+    };
 
     React.useEffect(() => {
         if (!monitoringList) {
@@ -34,7 +37,7 @@ export default function SimpleContainer() {
                     {monitoringList && <MonitoringList
                         monitoringList={monitoringList.filter(x => x.status == navStatusRest[navIndex])}
                         setMonitoringList={setMonitoringList}
-                        snack={snack}/>}
+                        snack={handleSetSnackBarMessage}/>}
                 </Typography>
             </Container>
             <SnackBar open={snackBarOpen}
