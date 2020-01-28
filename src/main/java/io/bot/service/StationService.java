@@ -9,16 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class StationService {
 
-//    @Autowired
-    StationSearcher stationSearcher;
+    private StationSearcher stationSearcher;
 
     public StationService(StationSearcher stationSearcher) {
         this.stationSearcher = stationSearcher;
@@ -47,7 +46,7 @@ public class StationService {
 
 
         List<Integer> stationCodes = stations.stream()
-                .map(x -> x.getStationCode()).collect(Collectors.toList());
+                .map(Station::getStationCode).collect(Collectors.toList());
 
         StationKeyMap stationKeyMap = new StationKeyMap();
         stationKeyMap.setStations(stationCodes);
@@ -55,7 +54,11 @@ public class StationService {
         List<Station> saveAll = stationRepo.saveAll(stations);
         stationKeyMapRepo.save(stationKeyMap);
         return saveAll;
+    }
 
+    public List<Station> getTop10(){
+        List<Integer> list = Arrays.asList(2200001, 2210700, 2218000, 2208001, 2218200, 2210800, 2204001, 2218095);
+        return stationRepo.findAllById(list);
     }
 
 }

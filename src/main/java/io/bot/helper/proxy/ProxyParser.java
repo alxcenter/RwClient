@@ -1,6 +1,8 @@
 package io.bot.helper.proxy;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -16,6 +18,7 @@ import java.util.concurrent.*;
 @Component
 public class ProxyParser {
 
+    private Logger log = LoggerFactory.getLogger(ProxyParser.class);
     private final String URL = "https://booking.uz.gov.ua/ru/train_search/station/";
 
     @Autowired
@@ -36,21 +39,13 @@ public class ProxyParser {
             proxyObject.setPort(Integer.valueOf(stringProxy[1]));
             service.submit(() -> checkProxy(proxyObject));
         }
-//        while (latch.getCount() > 0) {
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            System.out.println(latch.getCount());
-//        }
         try {
             latch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         for (RwProxy x : successProxy) {
-            System.out.println(x.getHost() + ":" + x.getPort() + " : " + x.getResponseTime() + " sec.");
+            log.debug(x.getHost() + ":" + x.getPort() + " : " + x.getResponseTime() + " sec.");
         }
         service.shutdown();
         return successProxy;
@@ -65,7 +60,7 @@ public class ProxyParser {
                     try {
                         actionForProxy(proxy);
                     } catch (NoSuchElementException e) {
-                        System.out.println(e.getMessage());
+                        log.error(e.getMessage());
                     }
                 }
         );
@@ -111,7 +106,7 @@ public class ProxyParser {
         RestTemplate restTemplate = new RestTemplate(getRequestFactory(proxyObject));
         ResponseEntity<String> response = restTemplate.getForEntity(URL, String.class);
         Date date2 = new Date();
-        proxyObject.setResponseTime((int)((date2.getTime() - date1.getTime()) / 1000));
+        proxyObject.setResponseTime((int) ((date2.getTime() - date1.getTime()) / 1000));
         return proxyObject;
     }
 

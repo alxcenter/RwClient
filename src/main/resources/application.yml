@@ -15,6 +15,12 @@ telega:
   apiToken: ${telega_apiToken}
 rw:
   proxy: ${rw_proxy}
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.hibernate: info
+    io.bot: debug
 ---
 spring:
   profiles: dev

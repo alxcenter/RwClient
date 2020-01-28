@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class KeyboardSwitcher {
 
-    public final static String RU = "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю";
-    public final static String EN = "QWERTYUIOP[]ASDFGHJKL;'ZXCVBNM,.qwertyuiop[]asdfghjkl;'zxcvbnm,.";
+    private final static String RU = "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю";
+    private final static String EN = "QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM,.qwertyuiop[]asdfghjkl;'zxcvbnm,.";
 
     public String changheKeyboardLayout(String input) {
         char[] chars = input.toCharArray();
@@ -20,8 +20,8 @@ public class KeyboardSwitcher {
 
     private boolean isEnglishLayout(char a) {
         char[] chars = EN.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == a) {
+        for (char x :chars) {
+            if (x == a) {
                 return true;
             }
         }

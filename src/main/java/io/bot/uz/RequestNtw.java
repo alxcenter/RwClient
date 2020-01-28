@@ -1,5 +1,7 @@
 package io.bot.uz;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class RequestNtw {
+
+    private Logger log = LoggerFactory.getLogger(RequestNtw.class);
 
     public RequestNtw(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -32,7 +36,7 @@ public class RequestNtw {
         ResponseEntity<String> responseEntity = getResponseEntity(searchBy, post, cookies);
         List<String> list = responseEntity.getHeaders().get("set-cookie");
         String coo = this.sessionCookies == null ? parseCookies(list) : this.sessionCookies;
-        System.out.println(coo);
+        log.debug("POST cookies is " + coo);
         return new String[]{responseEntity.getBody(), coo};
     }
 
@@ -44,8 +48,7 @@ public class RequestNtw {
         headers.add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         headers.add("Origin", "https://booking.uz.gov.ua");
         HttpEntity<String> entity = new HttpEntity<>(post, headers);
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url + searchBy + "/", entity, String.class);
-        return responseEntity;
+        return restTemplate.postForEntity(url + searchBy + "/", entity, String.class);
     }
 
     public String sendGet(String searchBy) {
@@ -73,7 +76,7 @@ public class RequestNtw {
         headers.add("Accept", "image/webp,image/apng,image/*,*/*;q=0.8");
         HttpEntity httpEntity = new HttpEntity(headers);
         ResponseEntity<byte[]> entity = restTemplate.exchange(url + searchBy, HttpMethod.GET, httpEntity, byte[].class);
-        System.out.println(entity.getHeaders());
+        log.debug(entity.getHeaders().toString());
         return new ByteArrayInputStream(entity.getBody());
     }
 
@@ -89,7 +92,7 @@ public class RequestNtw {
                 isFind = true;
             }
         }
-        System.out.print("\nCookies is = " + cookies.toString() + "\n");
+        log.debug("Cookies is = " + cookies.toString());
         if (this.sessionCookies == null) {
             this.sessionCookies = cookies.toString();
         }
