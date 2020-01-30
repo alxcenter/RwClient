@@ -1,6 +1,6 @@
-class CaptchaEx extends Error{
-    constructor(message) {
-        super(message); // (1)
-        this.name = "ValidationError"; // (2)
+export class CaptchaEx extends Error {
+    constructor(...args) {
+        super(...args);
+        Error.captureStackTrace(this, CaptchaEx);
     }
 }

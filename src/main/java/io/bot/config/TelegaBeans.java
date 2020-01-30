@@ -36,18 +36,7 @@ public class TelegaBeans {
     @Qualifier("telega")
     @Scope("prototype")
     public TrainSearch getTrainSearch(){
-        TrainSearch trainSearch = new TrainSearch();
-        trainSearch.setRequest(getRequestNtw());
-        return trainSearch;
-    }
-
-    @Bean
-    @Qualifier("telega")
-    @Scope("prototype")
-    public StationSearcher getStationSearcher(){
-        StationSearcher stationSearcher = new StationSearcher();
-        stationSearcher.setRequest(getRequestNtw());
-        return stationSearcher;
+        return new TrainSearch(getRequestNtw());
     }
 
     @Bean
@@ -55,6 +44,13 @@ public class TelegaBeans {
     @Scope("prototype")
     public StationService getStationService(){
         return new StationService(getStationSearcher());
+    }
+
+    @Bean
+    @Qualifier("telega")
+    @Scope("prototype")
+    public StationSearcher getStationSearcher(){
+        return new StationSearcher(getRequestNtw());
     }
 
 }

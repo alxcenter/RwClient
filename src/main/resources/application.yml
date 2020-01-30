@@ -9,7 +9,7 @@ server:
   port: ${PORT:80}
   servlet:
     session:
-      timeout: 100m
+      timeout: 10m
 telega:
   name: ${telega_name}
   apiToken: ${telega_apiToken}

@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {resolveCaptcha} from './trains/TrainSearcher.js'
+import LoadingButton from './LoadingButton.js'
+
 
 export default function CaptchaPopup(props) {
     const [open, setOpen] = React.useState(false);
@@ -26,8 +28,12 @@ export default function CaptchaPopup(props) {
         props.close();
     };
 
-    let resolve = function (text) {
-        resolveCaptcha(text)
+    let handleSend = () => {
+        return resolve(text);
+    };
+
+    let resolve = function () {
+        return resolveCaptcha(text)
             .then((response) => {
                 console.log(response);
                 props.close();
@@ -35,8 +41,8 @@ export default function CaptchaPopup(props) {
             })
             .catch(() => {
                 text = '';
-                setAttempt(attempt+1);
-                document.getElementById("captchaField").value="";
+                setAttempt(attempt + 1);
+                document.getElementById("captchaField").value = "";
             });
     };
 
@@ -63,9 +69,7 @@ export default function CaptchaPopup(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => resolve(text)} color="primary">
-                        Send
-                    </Button>
+                    <LoadingButton text="Send" handleClick={handleSend}/>
                 </DialogActions>
             </Dialog>
         </div>

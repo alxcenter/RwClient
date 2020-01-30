@@ -17,16 +17,14 @@ import java.util.Optional;
 public class RequestNtw {
 
     private Logger log = LoggerFactory.getLogger(RequestNtw.class);
+    private RestTemplate restTemplate;
+    private final String AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
+    private final String url = "https://booking.uz.gov.ua/ru/";
+    private String sessionCookies;
 
     public RequestNtw(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
-    private RestTemplate restTemplate;
-
-    private final String AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
-    private final String url = "https://booking.uz.gov.ua/ru/";
-    private String sessionCookies;
 
     public String[] sendPost(String searchBy, String post) {
         return sendPost(searchBy, post, null);
@@ -84,11 +82,11 @@ public class RequestNtw {
         StringBuilder cookies = new StringBuilder();
         boolean isFind = false;
         for (String x : cookiesHeaders) {
-            if (x.startsWith("_gv_sessid") && isFind) {
+            if (hasSession(x) && isFind) {
                 cookies.append(x.split(" ")[0] + " ");
-            } else if (!x.startsWith("_gv_sessid")) {
+            } else if (!hasSession(x)) {
                 cookies.append(x.split(" ")[0] + " ");
-            } else if (x.startsWith("_gv_sessid")) {
+            } else if (hasSession(x)) {
                 isFind = true;
             }
         }
@@ -97,6 +95,10 @@ public class RequestNtw {
             this.sessionCookies = cookies.toString();
         }
         return cookies.toString();
+    }
+
+    private boolean hasSession(String header){
+        return header.startsWith("_gv_sessid");
     }
 
     private MultiValueMap<String, String> getHeaders() {

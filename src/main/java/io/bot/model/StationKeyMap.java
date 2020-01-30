@@ -13,6 +13,8 @@ public class StationKeyMap {
     @ElementCollection
     private List<Integer> stations;
 
+    
+
     public int getId() {
         return id;
     }

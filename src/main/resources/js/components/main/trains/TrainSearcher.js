@@ -1,3 +1,5 @@
+import {CaptchaEx} from "../../exceptions/CaptchaEx"
+
 export async function resolveCaptcha(solved) {
     return fetch('/api/trainCaptcha',
         {
@@ -8,8 +10,19 @@ export async function resolveCaptcha(solved) {
             body: JSON.stringify({captcha: solved})
         })
         .then((response) => {
-            if (response.status == 409) throw new Error('captcha');
-            else return response.json();
+            if (response.ok) return response.json();
+            else if (response.status == 409) {
+                return response.json().then((obj) => {
+                    console.log(obj.message);
+                    throw new CaptchaEx(obj.message.toString());
+                });
+            }
+            else {
+                return response.json().then((obj) => {
+                    console.log(obj.message);
+                    throw new Error(obj.message.toString());
+                });
+            }
         });
 }
 
@@ -22,12 +35,23 @@ export async function getTrainList(moni) {
         body: JSON.stringify(moni)
     })
         .then((response) => {
-            if (response.status == 409) throw new CaptchaEx('captcha');
-            else return response.json();
+            if (response.ok) return response.json();
+            else if (response.status == 409) {
+                return response.json().then((obj) => {
+                    console.log(obj.message);
+                    throw new CaptchaEx(obj.message.toString());
+                });
+            }
+            else {
+                return response.json().then((obj) => {
+                    console.log(obj.message);
+                    throw new Error(obj.message.toString());
+                });
+            }
         });
 }
 
-export async function  createMonitoring(moni) {
+export async function createMonitoring(moni) {
     return fetch(`/api/monitorings`, {
         method: 'POST',
         headers: {
@@ -35,6 +59,8 @@ export async function  createMonitoring(moni) {
         },
         body: JSON.stringify(moni)
     })
-        .then((response) => {return response.json()});
+        .then((response) => {
+            return response.json()
+        });
 }
 

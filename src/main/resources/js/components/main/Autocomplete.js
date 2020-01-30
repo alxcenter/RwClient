@@ -18,10 +18,10 @@ export default function Asynchronous(props) {
     const [ver, setVer] = React.useState(0);
     const loading = open && options.length === 0 && inputValue != '';
 
+
+
     const handleInputChange = event => {
-        // console.log(`inputValue is = ${inputValue}`);
         setInputValue(event.target.value);
-        // console.log(`inputValue is = ${event.target.value}`);
         let text = event.target.value;
         props.setState({options: options, text: text, ver: ver});
         new Promise((resolve) => {
@@ -60,9 +60,7 @@ export default function Asynchronous(props) {
     };
 
     React.useEffect(() => {
-        console.log(`${props.autocompleteName} inputvalue is = ${inputValue}`);
         if (props.state != null) {
-            // console.log(`${props.state.ver} autocomplete ver.${ver}`);
             if (props.version != ver) {
                 console.log('do changes');
                 setInputValue(props.state.text);
@@ -73,10 +71,8 @@ export default function Asynchronous(props) {
     });
 
 
-    const getStations = (stationName) => {
-        if (stationName.length < 3) {
-            setOptions([]);
-        } else {
+    const getStations = (stationName, isFirstInit) => {
+        if (stationName.length > 2 || isFirstInit) {
             (async () => {
                 await sleep(1e3);
                 await fetch(`/api/stations/find?name=${stationName}`)
@@ -93,6 +89,8 @@ export default function Asynchronous(props) {
                     })
                     .then(handleSetOptions);
             })();
+        } else {
+            setOptions([]);
         }
     };
 

@@ -1,6 +1,7 @@
 package io.bot.uz;
 
-import io.bot.uz.BotException.*;
+import io.bot.uz.BotException.CaptchaException;
+import io.bot.uz.BotException.RailWayException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,7 +20,11 @@ public class TrainSearch {
     private String post;
     private TrainParser trainParser;
 
-    public List<Train> getTrains(String from, String to, Date date) throws OtherException, WrongDateException, TrainNotFoundException, ServiceTemporarilyUnavailableException, CaptchaException {
+    public TrainSearch(RequestNtw request) {
+        this.request = request;
+    }
+
+    public List<Train> getTrains(String from, String to, Date date) throws RailWayException {
         List<Train> trains = null;
         try {
             trains = getTrains(from, to, date, null);
@@ -29,7 +34,7 @@ public class TrainSearch {
         return trains;
     }
 
-    public List<Train> getTrains(String from, String to, Date date, String captcha) throws OtherException, WrongDateException, TrainNotFoundException, ServiceTemporarilyUnavailableException, CaptchaException {
+    public List<Train> getTrains(String from, String to, Date date, String captcha) throws RailWayException {
         List<Train> trainList = null;
         trainParser = new TrainParser();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);

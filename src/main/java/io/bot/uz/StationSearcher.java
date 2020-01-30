@@ -5,8 +5,11 @@ import java.util.Map;
 public class StationSearcher {
 
     private RequestNtw request;
-
     private String searchBy = "train_search/station/?term=";
+
+    public StationSearcher(RequestNtw request) {
+        this.request = request;
+    }
 
     public Map<Integer, String> getStations(String stationName) {
         String json = request.sendGet(searchBy + stationName);

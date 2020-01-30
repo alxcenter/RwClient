@@ -43,8 +43,6 @@ public class WebClientBeans {
         return requestFactory;
     }
 
-
-
     @Bean
     @SessionScope
     @Primary
@@ -56,17 +54,13 @@ public class WebClientBeans {
     @SessionScope
     @Primary
     public TrainSearch getTrainSearchForWeb(){
-        TrainSearch trainSearch = new TrainSearch();
-        trainSearch.setRequest(getRequestNtwForWeb());
-        return trainSearch;
+        return new TrainSearch(getRequestNtwForWeb());
     }
 
     @Bean
     @SessionScope
     @Primary
-    public StationSearcher getStationSearcherForWeb(RequestNtw requestNtw){
-        StationSearcher stationSearcher = new StationSearcher();
-        stationSearcher.setRequest(requestNtw);
-        return stationSearcher;
+    public StationSearcher getStationSearcherForWeb(){
+        return new StationSearcher(getRequestNtwForWeb());
     }
 }

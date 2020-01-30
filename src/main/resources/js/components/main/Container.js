@@ -14,6 +14,7 @@ import AddUsersDialog from "./passengers/AddUsersDialog";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fade from "@material-ui/core/Fade";
 import SnackBar from '../SnackBar';
+import {CaptchaEx} from "../exceptions/CaptchaEx"
 
 
 export default function FixedContainer() {
@@ -37,8 +38,14 @@ export default function FixedContainer() {
             getTrainList(monitor)
                 .then(setTrainListOpen)
                 .then(() => setLoading(false))
-                .catch(() => {
-                    setCaptchaPopupOpen(true);
+                .catch((error) => {
+                    if (error instanceof CaptchaEx) {
+                        setCaptchaPopupOpen(true);
+                        console.error(error.message);
+                    }else {
+                        handleSetSnackBarMessage(error.message);
+                        setLoading(false);
+                    }
                 });
         }
     };
