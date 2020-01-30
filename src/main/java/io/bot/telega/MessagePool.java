@@ -11,17 +11,16 @@ import java.util.Queue;
  */
 
 public class MessagePool{
-    Bot bot;
-    long chatId = 167944354L;
+    private static Queue<String> messages = new PriorityQueue<String>();
+    private Bot bot;
+    private long chatId = 167944354L;
+
 
     public MessagePool(Bot bot) {
         this.bot = bot;
     }
 
-    private static Queue<String> messages = new PriorityQueue<String>();
-
     public void startSending(){
-//        messages.add("Test");
         SendMessage sendMessage = new SendMessage(chatId, "Client was run successfully");
         MonitorMessage monitorMessage = new MonitorMessage();
         monitorMessage.start();

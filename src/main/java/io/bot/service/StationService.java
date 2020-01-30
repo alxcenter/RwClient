@@ -20,7 +20,7 @@ public class StationService {
     @Autowired
     private StationRepo stationRepo;
     @Autowired
-    private StationKeyMapRepo stationKeyMapRepo;
+    private StationKeyMapRepo keyMapRepo;
     private StationSearcher stationSearcher;
 
     public StationService(StationSearcher stationSearcher) {
@@ -28,12 +28,9 @@ public class StationService {
     }
 
     public List<Station> getStations(String name) {
-        StationKeyMap keyMap = stationKeyMapRepo.findByKeywords(name);
-        if (keyMap != null) {
-            return stationRepo.findAllById(keyMap.getStations());
-        } else {
-            return createNewKeyMap(name);
-        }
+        StationKeyMap stationKeyMap = keyMapRepo.findByKeywords(name);
+        return stationKeyMap == null ? createNewKeyMap(name) :
+                stationRepo.findAllById(stationKeyMap.getStations());
     }
 
     private List<Station> createNewKeyMap(String name) {
@@ -47,12 +44,10 @@ public class StationService {
                 .map(Station::getStationCode)
                 .collect(Collectors.toList());
 
-        StationKeyMap stationKeyMap = new StationKeyMap();
-        stationKeyMap.setStations(stationCodes);
-        stationKeyMap.setKeywords(name);
-        List<Station> saveAll = stationRepo.saveAll(stations);
-        stationKeyMapRepo.save(stationKeyMap);
-        return saveAll;
+        StationKeyMap stationKeyMap = new StationKeyMap(name, stationCodes);
+        List<Station> savedStations = stationRepo.saveAll(stations);
+        keyMapRepo.save(stationKeyMap);
+        return savedStations;
     }
 
     public List<Station> getTop10() {

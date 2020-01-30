@@ -8,11 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /*Временный класс. потом перенести на другой сервак*/
 @Component
@@ -45,40 +45,27 @@ public class ProxyDownloader implements ProxyGrabber{
         String source = temp[1].replaceAll("\\d", "");
                 Pattern pattern = Pattern.compile("<a href=\"(/.*)\">" + source + "_proxy");
         Matcher matcher = pattern.matcher(body);
-        while (matcher.find()) {
-            String group = matcher.group(1);
-            resultUrl = resultUrl + group;
-            break;
+        if (matcher.find()) {
+            resultUrl += matcher.group(1);
         }
         return resultUrl;
     }
 
     private String getProxyString(String body) {
-        String resultProxy = new String();
         Pattern pattern = Pattern.compile("id.*_\\w\\we\n(.*)</textarea>", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(body);
-        while (matcher.find()) {
-            String group = matcher.group(1);
-            resultProxy = group;
-            break;
-        }
-        return resultProxy;
+        return matcher.find() ? matcher.group(1) : null;
     }
 
     private List<String> convertProxyStringToList(String proxy){
         List<String> temp = Arrays.asList(proxy.split("\n"));
-        List<String> list = new ArrayList<>();
-        temp.forEach(x -> {
-            if (validateAnonymousProxy(x)){
-                list.add(x.split(" ")[0]);
-            }
-        });
-        return list;
+        return temp.stream()
+                .map(this::executeProxy)
+                .collect(Collectors.toList());
     }
 
-    private boolean validateAnonymousProxy(String pr) {
-        if (pr.contains("-N")) return false;
-        return true;
+    private String executeProxy(String line) {
+        return line.split(" ")[0];
     }
 
 }

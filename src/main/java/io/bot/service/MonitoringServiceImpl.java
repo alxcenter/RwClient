@@ -2,15 +2,12 @@ package io.bot.service;
 
 import io.bot.exceptions.MonitoringNotFoundException;
 import io.bot.model.Monitoring;
-import io.bot.model.Station;
 import io.bot.model.Status;
-import io.bot.model.User;
 import io.bot.repositories.MonitoringRepo;
 import io.bot.repositories.StationRepo;
 import io.bot.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,13 +15,11 @@ import java.util.List;
 public class MonitoringServiceImpl implements MonitoringService {
 
     @Autowired
-    MonitoringRepo monitoringRepo;
-
+    private MonitoringRepo monitoringRepo;
     @Autowired
-    UserRepo userRepo;
-
+    private StationRepo stationRepo;
     @Autowired
-    StationRepo stationRepo;
+    private UserRepo userRepo;
 
     @Override
     public Monitoring createMonitoring(Monitoring monitoring) {

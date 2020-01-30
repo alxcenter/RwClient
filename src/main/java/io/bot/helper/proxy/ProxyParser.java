@@ -13,9 +13,11 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 @Component
 public class ProxyParser {
@@ -24,7 +26,7 @@ public class ProxyParser {
     private final String URL = "https://booking.uz.gov.ua/ru/train_search/";
 
     @Autowired
-    ProxyGrabber grabber;
+    private ProxyGrabber grabber;
 
     private static List<String> proxyList;
     private static List<RwProxy> successProxy = Collections.synchronizedList(new LinkedList<>());
@@ -42,7 +44,7 @@ public class ProxyParser {
             proxyObject.setPort(Integer.valueOf(stringProxy[1]));
             service.submit(() -> checkProxy(proxyObject));
         }
-        while (latch.getCount() > 0){
+        while (latch.getCount() > 0) {
             try {
                 Thread.sleep(5000);
                 System.out.println("Threads left " + latch.getCount() + " Successful list size: " + successProxy.size());
@@ -57,14 +59,12 @@ public class ProxyParser {
         }
         System.out.println("Success proxy size " + successProxy.size());
         for (RwProxy x : successProxy) {
-//            log.debug(x.getHost() + ":" + x.getPort() + " : " + x.getResponseTime() + " sec.");
-            System.out.println(x.getHost() + ":" + x.getPort());
+            log.debug(x.getHost() + ":" + x.getPort() + " : " + x.getResponseTime() + " sec.");
+//            System.out.println(x.getHost() + ":" + x.getPort());
         }
         service.shutdown();
 
-        return successProxy.stream()
-                .filter(x-> x.getResponseTime() < 5)
-                .collect(Collectors.toList());
+        return successProxy;
     }
 
     private void checkProxy(RwProxy proxy) {
@@ -83,11 +83,7 @@ public class ProxyParser {
 
         try {
             submit.get(5, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            submit.cancel(true);
-        } catch (ExecutionException e) {
-            submit.cancel(true);
-        } catch (TimeoutException e) {
+        } catch (Exception e) {
             submit.cancel(true);
         } finally {
             latch.countDown();
@@ -104,14 +100,6 @@ public class ProxyParser {
 
 
     private void actionForProxy(RwProxy x) {
-        Thread counterThread = new Thread(() -> {
-            try {
-                Thread.sleep(1_000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        counterThread.start();
         boolean is2xx = getRequest(x);
         if (is2xx) {
             successProxy.add(x);
@@ -120,12 +108,12 @@ public class ProxyParser {
 
 
     private boolean getRequest(RwProxy proxyObject) {
-        Date date1 = new Date();
+        long t1 = System.currentTimeMillis();
         RestTemplate restTemplate = new RestTemplate(getRequestFactory(proxyObject));
         ResponseEntity<String> response = restTemplate.postForEntity(URL, new HttpEntity<>("from=2200001&to=2218000&date=2020-02-30"), String.class);
         response.getStatusCode().is2xxSuccessful();
-        Date date2 = new Date();
-        proxyObject.setResponseTime((int) ((date2.getTime() - date1.getTime()) / 1000));
+        long l = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - t1);
+        proxyObject.setResponseTime((int) l);
         return response.getStatusCode().is2xxSuccessful();
     }
 
