@@ -13,8 +13,8 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-@Autowired
-UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

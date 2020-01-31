@@ -2,10 +2,9 @@ package io.bot.controllers.rest;
 
 import io.bot.model.Monitoring;
 import io.bot.model.User;
-import io.bot.uz.BotException.CaptchaException;
 import io.bot.uz.BotException.RailWayException;
-import io.bot.uz.Train;
 import io.bot.uz.TrainSearch;
+import io.bot.uz.model.Train;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,28 +36,21 @@ public class SearchController {
                                     @AuthenticationPrincipal User user) throws RailWayException {
         map.put("currentMonitoring", monitoring);
         log.debug("User " + user.getUsername() + " searching trains on route " + monitoring);
-        List<Train> trains = trainSearch.getTrains(
-                    String.valueOf(monitoring.getFromStation().getStationCode()),
-                    String.valueOf(monitoring.getToStation().getStationCode()),
-                    monitoring.getDate());
-        return trains;
+        return trainSearch.getTrains(
+                String.valueOf(monitoring.getFromStation().getStationCode()),
+                String.valueOf(monitoring.getToStation().getStationCode()),
+                monitoring.getDate());
     }
 
     @PostMapping("/trainCaptcha")
     public List<Train> getTrainList(@RequestBody Map<String, String> payload) throws RailWayException {
         Monitoring monitoring = (Monitoring) map.get("currentMonitoring");
-        List<Train> trains = null;
-        try {
-            trains = trainSearch.getTrains(
-                    String.valueOf(monitoring.getFromStation().getStationCode()),
-                    String.valueOf(monitoring.getToStation().getStationCode()),
-                    monitoring.getDate(),
-                    payload.get("captcha")
-            );
-        } catch (CaptchaException e) {
-            throw e;
-        }
-        return trains;
+        return trainSearch.getTrains(
+                String.valueOf(monitoring.getFromStation().getStationCode()),
+                String.valueOf(monitoring.getToStation().getStationCode()),
+                monitoring.getDate(),
+                payload.get("captcha")
+        );
     }
 
 }

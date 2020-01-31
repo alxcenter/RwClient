@@ -23,7 +23,7 @@ import java.nio.charset.Charset;
 public class WebClientBeans {
 
     @Autowired
-    ProxyManager proxyManager;
+    private ProxyManager proxyManager;
 
     @Bean
     @SessionScope

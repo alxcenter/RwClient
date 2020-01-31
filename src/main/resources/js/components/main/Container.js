@@ -1,9 +1,6 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import SwapHorizOutlinedIcon from '@material-ui/icons/SwapHorizOutlined';
 import Container from '@material-ui/core/Container';
-import Asynchronous from './Autocomplete';
 import MaterialUIPickers from './DateUI';
 import ContainedButtons from './SearchButton';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +11,7 @@ import AddUsersDialog from "./passengers/AddUsersDialog";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fade from "@material-ui/core/Fade";
 import SnackBar from '../SnackBar';
+import StationContainer from './StationContainer';
 import {CaptchaEx} from "../exceptions/CaptchaEx"
 
 
@@ -25,7 +23,6 @@ export default function FixedContainer() {
     const [loading, setLoading] = React.useState(false);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState(null);
-    const [autocompleteState, setAutocompleteState] = React.useState({from: null, to: null, ver: 0});
 
     /*вызываем при нажатии на кнопку поиска поездов*/
     let handleSearchButton = function () {
@@ -67,28 +64,6 @@ export default function FixedContainer() {
         setMonitor(temp);
     };
 
-    let from = (<Asynchronous autocompleteName="Станция отправления"
-                              id={"async_from"}
-                              snack={handleSetSnackBarMessage}
-                              version={autocompleteState.ver}
-                              state={autocompleteState.from}
-                              setState={(state) => {autocompleteState.from = state}}
-                              station={monitor.fromStation}
-                              setStation={(station) => {
-                                  monitor.fromStation = station;
-                              }}/>);
-
-    let to = (<Asynchronous autocompleteName="Станция прибытия"
-                            id={"async_to"}
-                            snack={handleSetSnackBarMessage}
-                            version={autocompleteState.ver}
-                            state={autocompleteState.to}
-                            setState={(state) => {autocompleteState.to = state}}
-                            station={monitor.toStation}
-                            setStation={(station) => {
-                                monitor.toStation = station;
-                            }}/>);
-
     let handleSetTrain = (train) => {
         let temp = monitor;
         temp.trainNumber = train;
@@ -104,18 +79,6 @@ export default function FixedContainer() {
     };
 
 
-    let handleChangeStations = () => {
-        console.log("start changing v." + autocompleteState.ver);
-        let mon = Object.assign({}, monitor);
-        let autoState = Object.assign({}, autocompleteState);
-        autoState.from = autocompleteState.to;
-        autoState.to = autocompleteState.from;
-        autoState.ver = autocompleteState.ver+1;
-        setAutocompleteState(autoState);
-        mon.fromStation = monitor.toStation;
-        mon.toStation = monitor.fromStation;
-        setMonitor(mon);
-    };
 
     return (
         <React.Fragment>
@@ -124,21 +87,9 @@ export default function FixedContainer() {
             </Fade>
             <CssBaseline/><br/>
             <Container fixed>
-                <Grid container direction="row" justify="center" alignItems="center">
-                    <Grid item>
-                        {from}
-                    </Grid>
-                    <Grid item>
-                        <IconButton color="secondary" aria-label="Change directions" disableFocusRipple={true}
-                                    disableRipple={true}
-                        onClick={handleChangeStations}>
-                            <SwapHorizOutlinedIcon color={"secondary"} fontSize={"large"}/>
-                        </IconButton>
-                    </Grid>
-                    <Grid item>
-                        {to}
-                    </Grid>
-                </Grid>
+                <StationContainer
+                    setSnackBarMessage={handleSetSnackBarMessage}
+                    setMonitor={setMonitor}/>
                 <Grid container direction="column" justify="center" alignItems="center">
                     <Grid item>
                         <MaterialUIPickers setDate={(date) => {

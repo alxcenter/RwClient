@@ -5,7 +5,6 @@ import io.bot.helper.KeyboardSwitcher;
 import io.bot.model.Station;
 import io.bot.repositories.StationRepo;
 import io.bot.service.StationService;
-import io.bot.uz.StationSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +16,10 @@ public class StationController {
 
     @Autowired
     private StationRepo stationRepo;
-
     @Autowired
-    StationSearcher stationSearcher;
-
+    private StationService stationService;
     @Autowired
-    StationService stationService;
-
-    @Autowired
-    KeyboardSwitcher keyboardSwitcher;
+    private KeyboardSwitcher keyboardSwitcher;
 
     @PostMapping("/stations")
     public Station createStation(@RequestBody Station station) {
@@ -36,7 +30,7 @@ public class StationController {
     @GetMapping("/stations/find")
     public List<Station> findStation(@RequestParam(required = false) String name) {
         if (name == null || name.isEmpty()) return stationService.getTop10();
-        String s = keyboardSwitcher.changheKeyboardLayout(name.toLowerCase());
+        String s = keyboardSwitcher.changeKeyboardLayout(name.toLowerCase());
         return stationService.getStations(s);
     }
 
@@ -52,7 +46,7 @@ public class StationController {
     }
 
     @GetMapping("/stations")
-    List<Station> all(String name) {
+    List<Station> getAll() {
         return stationRepo.findAll();
     }
 }

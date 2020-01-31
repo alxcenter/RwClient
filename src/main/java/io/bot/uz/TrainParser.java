@@ -2,7 +2,7 @@ package io.bot.uz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bot.uz.BotException.*;
-import io.bot.uz.Train;
+import io.bot.uz.model.Train;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

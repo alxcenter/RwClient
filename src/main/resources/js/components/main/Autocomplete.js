@@ -16,9 +16,7 @@ export default function Asynchronous(props) {
     const [timer, setTimer] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [ver, setVer] = React.useState(0);
-    const loading = open && options.length === 0 && inputValue != '';
-
-
+    const loading = open && timer && inputValue != '';
 
     const handleInputChange = event => {
         setInputValue(event.target.value);
@@ -87,7 +85,8 @@ export default function Asynchronous(props) {
                                 })
                         }
                     })
-                    .then(handleSetOptions);
+                    .then(handleSetOptions)
+                    .then(setTimer);
             })();
         } else {
             setOptions([]);

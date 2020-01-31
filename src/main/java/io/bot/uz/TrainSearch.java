@@ -2,6 +2,7 @@ package io.bot.uz;
 
 import io.bot.uz.BotException.CaptchaException;
 import io.bot.uz.BotException.RailWayException;
+import io.bot.uz.model.Train;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class TrainSearch {
     }
 
     public List<Train> getTrains(String from, String to, Date date) throws RailWayException {
-        List<Train> trains = null;
+        List<Train> trains;
         try {
             trains = getTrains(from, to, date, null);
         } catch (CaptchaException e) {
@@ -35,7 +36,7 @@ public class TrainSearch {
     }
 
     public List<Train> getTrains(String from, String to, Date date, String captcha) throws RailWayException {
-        List<Train> trainList = null;
+        List<Train> trainList;
         trainParser = new TrainParser();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         post = String.format("from=%s&to=%s&date=%s", from, to, dateFormat.format(date));

@@ -1,4 +1,4 @@
-package io.bot.uz;
+package io.bot.uz.model;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

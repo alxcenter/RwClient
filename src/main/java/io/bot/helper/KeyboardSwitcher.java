@@ -8,7 +8,7 @@ public class KeyboardSwitcher {
     private final static String RU = "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю";
     private final static String EN = "QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM,.qwertyuiop[]asdfghjkl;'zxcvbnm,.";
 
-    public String changheKeyboardLayout(String input) {
+    public String changeKeyboardLayout(String input) {
         char[] chars = input.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             char currentChar = chars[i];

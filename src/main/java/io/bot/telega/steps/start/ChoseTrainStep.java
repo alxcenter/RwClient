@@ -7,8 +7,8 @@ import io.bot.uz.BotException.CaptchaException;
 import io.bot.uz.BotException.RailWayException;
 import io.bot.uz.BotException.TrainNotFoundException;
 import io.bot.uz.RequestNtw;
-import io.bot.uz.Train;
 import io.bot.uz.TrainSearch;
+import io.bot.uz.model.Train;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -34,8 +34,8 @@ public class ChoseTrainStep extends Stepper {
     @Autowired
     @Qualifier("telega")
     TrainSearch trainSearch;
-    int progress = 1;
-    boolean wasSearchSuccess = false;
+    private int progress = 1;
+    private boolean wasSearchSuccess = false;
     private InlineKeyboardMarkup inlineKeyboardMarkup;
     private String tempTrainNumber = null;
     private String trainPropose = "Посмотри список поездов в расписании " + POINT_UP + ".\nВыбери номер поезда для поиска из списка ниже" + POINT_DOWN;
@@ -135,7 +135,8 @@ public class ChoseTrainStep extends Stepper {
 
     private void sendTrainList(List<Train> trains) {
         StringBuilder builder = new StringBuilder();
-        trains.stream().forEach(x -> builder.append(getFormattedTrain(x)));
+        trains.stream().map(this::getFormattedTrain)
+                .forEach(builder::append);
         builder.append(getDividedLine());
         trainListMessageId = sendMessage(builder.toString()).getMessageId();
         sentProposeToChoseStationMessage(trains);

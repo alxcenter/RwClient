@@ -1,11 +1,11 @@
 package io.bot.uz;
 
+import io.bot.uz.requsts.HeadersStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,7 +18,6 @@ public class RequestNtw {
 
     private Logger log = LoggerFactory.getLogger(RequestNtw.class);
     private RestTemplate restTemplate;
-    private final String AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
     private final String url = "https://booking.uz.gov.ua/ru/";
     private String sessionCookies;
 
@@ -39,12 +38,8 @@ public class RequestNtw {
     }
 
     public ResponseEntity<String> getResponseEntity(String searchBy, String post, String cookies) {
-        MultiValueMap<String, String> headers = getHeaders();
-        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
-        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
-        headers.add("Accept", "*/*");
-        headers.add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        headers.add("Origin", "https://booking.uz.gov.ua");
+        MultiValueMap<String, String> headers = HeadersStorage.getPostHeaders();
+        attachCookies(headers, cookies);
         HttpEntity<String> entity = new HttpEntity<>(post, headers);
         return restTemplate.postForEntity(url + searchBy + "/", entity, String.class);
     }
@@ -54,28 +49,25 @@ public class RequestNtw {
     }
 
     public String sendGet(String searchBy, String cookies) {
-        return sendGet(searchBy, cookies, false);
-    }
-
-    public String sendGet(String searchBy, String cookies, boolean isImage) {
-        MultiValueMap<String, String> headers = getHeaders();
-        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
-        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
-        headers.add("Accept", "application/json, text/javascript, */*; q=0.01");
+        MultiValueMap<String, String> headers = HeadersStorage.geHeadersForGet();
+        attachCookies(headers, cookies);
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
         ResponseEntity<String> entity = restTemplate.getForEntity(url + searchBy, String.class, httpEntity);
         return entity.getBody();
     }
 
     public InputStream getCaptcha(String searchBy, String cookies) {
-        MultiValueMap<String, String> headers = getHeaders();
-        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
-        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
-        headers.add("Accept", "image/webp,image/apng,image/*,*/*;q=0.8");
+        MultiValueMap<String, String> headers = HeadersStorage.getCaptchaHeaders();
+        attachCookies(headers, cookies);
         HttpEntity httpEntity = new HttpEntity(headers);
         ResponseEntity<byte[]> entity = restTemplate.exchange(url + searchBy, HttpMethod.GET, httpEntity, byte[].class);
         log.debug(entity.getHeaders().toString());
         return new ByteArrayInputStream(entity.getBody());
+    }
+
+    public void attachCookies(MultiValueMap<String, String> headers, String cookies) {
+        Optional.ofNullable(cookies).ifPresent(this::setSessionCookies);
+        Optional.ofNullable(this.sessionCookies).ifPresent(x -> headers.add("Cookie", x));
     }
 
     private String parseCookies(List<String> cookiesHeaders) {
@@ -91,25 +83,14 @@ public class RequestNtw {
             }
         }
         log.debug("Cookies is = " + cookies.toString());
-        if (this.sessionCookies == null) {
-            this.sessionCookies = cookies.toString();
-        }
+
+        this.sessionCookies = Optional.ofNullable(this.sessionCookies)
+                .orElse(cookies.toString());
         return cookies.toString();
     }
 
     private boolean hasSession(String header){
         return header.startsWith("_gv_sessid");
-    }
-
-    private MultiValueMap<String, String> getHeaders() {
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add("Accept-Encoding", "gzip, deflate, br");
-        headers.add("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
-        headers.add("User-Agent", AGENT);
-        headers.add("X-Requested-With", "XMLHttpRequest");
-        headers.add("Connection", "keep-alive");
-        headers.add("Host", "booking.uz.gov.ua");
-        return headers;
     }
 
     public RequestNtw setSessionCookies(String sessionCookies) {

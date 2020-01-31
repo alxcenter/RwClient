@@ -16,6 +16,7 @@ public class TelegaConf {
 
     @Value("${telega.name}")
     private String BOT_USER_NAME;
+
     @Value("${telega.apiToken}")
     private String BOT_TOKEN;
 
