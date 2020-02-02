@@ -9,12 +9,12 @@ public class HeadersStorage {
 
     private static MultiValueMap<String, String> getHeaders() {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add("Accept-Encoding", "gzip, deflate, br");
         headers.add("Accept-Language", "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7");
-        headers.add("User-Agent", AGENT);
+        headers.add("Accept-Encoding", "gzip, deflate, br");
         headers.add("X-Requested-With", "XMLHttpRequest");
         headers.add("Connection", "keep-alive");
         headers.add("Host", "booking.uz.gov.ua");
+        headers.add("User-Agent", AGENT);
         return headers;
     }
 
@@ -26,9 +26,9 @@ public class HeadersStorage {
 
     public static MultiValueMap<String, String> getPostHeaders() {
         MultiValueMap<String, String> headers = getHeaders();
-        headers.add("Accept", "*/*");
         headers.add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         headers.add("Origin", "https://booking.uz.gov.ua");
+        headers.add("Accept", "*/*");
         return headers;
     }
 

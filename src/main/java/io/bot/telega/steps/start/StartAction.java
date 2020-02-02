@@ -2,8 +2,6 @@ package io.bot.telega.steps.start;
 
 import io.bot.model.Monitoring;
 import io.bot.model.User;
-//import io.bot.services.MonitoringService;
-import io.bot.repositories.MonitoringRepo;
 import io.bot.service.MonitoringService;
 import io.bot.telega.steps.Stepper;
 import io.bot.telega.steps.UpdateResolver;
@@ -13,31 +11,31 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+
 @Component
 @Scope("prototype")
 public class StartAction implements UpdateResolver {
     @Autowired
-    CheckAuthStep checkAuthStep;
+    private CheckAuthStep checkAuthStep;
     @Autowired
-    ChoseStationStep choseStationStep;
+    private ChoseStationStep choseStationStep;
     @Autowired
-    ChoseTrainStep choseTrainStep;
+    private ChoseTrainStep choseTrainStep;
     @Autowired
-    ChosePlaceStep chosePlaceStep;
+    private ChosePlaceStep chosePlaceStep;
     @Autowired
-    ChosePassengersStep chosePassengersStep;
+    private ChosePassengersStep chosePassengersStep;
     @Autowired
-    ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
     @Autowired
-    MonitoringService monitoringService;
-    User user;
-    boolean isUserExist;
+    private MonitoringService monitoringService;
+    private User user;
+    private boolean isUserExist;
 
 
     private Monitoring monitoring;
     private Stepper stepper;
-    int progress = 0;
-
+    private int progress = 0;
 
 
     @Override
@@ -56,7 +54,7 @@ public class StartAction implements UpdateResolver {
                     }
                     stepper = progress == 1 ? choseStationStep.setMonitoring(monitoring) : stepper;
                 }
-                if (progress!=1) {
+                if (progress != 1) {
                     break;
                 }
             case 1:
@@ -79,7 +77,7 @@ public class StartAction implements UpdateResolver {
                 }
             case 4:
                 progress = getStep().updateAction(update) ? 5 : progress;
-                if (progress !=5) {
+                if (progress != 5) {
                     break;
                 }
             case 5:
@@ -96,7 +94,7 @@ public class StartAction implements UpdateResolver {
     }
 
     private Monitoring getMonitoring() {
-        if (monitoring == null){
+        if (monitoring == null) {
             monitoring = new Monitoring();
             monitoring.setRelatesTo(user);
         }
@@ -109,7 +107,7 @@ public class StartAction implements UpdateResolver {
         }
     }
 
-    private void resetAll(){
+    private void resetAll() {
         stepper = null;
         monitoring = null;
         progress = 0;
