@@ -15,16 +15,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Scope("prototype")
 public class UpdateManager {
 
-
     @Autowired
-    ApplicationContext context;
+    private ApplicationContext context;
     @Autowired
     @Qualifier("startAction")
-    UpdateResolver action;
+    private UpdateResolver action;
 
-    StartAction startAction;
-    InfoAction infoAction;
-    MonitoringList listAction;
+    private StartAction startAction;
+    private InfoAction infoAction;
+    private MonitoringList listAction;
 
     public void updateAction(Update update) {
         resolveCommand(update);

@@ -3,6 +3,8 @@ package io.bot.controllers;
 import io.bot.helper.TelegramValidation;
 import io.bot.model.User;
 import io.bot.repositories.UserRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("auth")
 public class AuthController {
+
+    private Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private TelegramValidation telegramValidation;
@@ -39,7 +43,9 @@ public class AuthController {
                         HttpServletRequest request,
                         HttpServletResponse response) throws ServletException {
         boolean valid = telegramValidation.validate(payload);
-        if (!valid){ return "/auth";}
+        if (!valid){
+            log.debug(String.format("Login was fail. User: %s", payload.get("username")));
+            return "/auth";}
         User user = userRepo.getUserByChatID(Long.parseLong(payload.get("id")))
                 .orElseGet(() -> {
                     User newUser = new User();
@@ -52,6 +58,7 @@ public class AuthController {
                 });
         request.login(user.getUsername(), user.getPassword());
         SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+        log.info("User " + user.getUsername() + " login successfully");
         return savedRequest!=null?savedRequest.getRedirectUrl():"/";
     }
 }

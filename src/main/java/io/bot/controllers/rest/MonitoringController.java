@@ -1,7 +1,6 @@
 package io.bot.controllers.rest;
 
 import io.bot.model.Monitoring;
-import io.bot.model.Status;
 import io.bot.model.User;
 import io.bot.service.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;

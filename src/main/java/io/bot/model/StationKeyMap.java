@@ -13,6 +13,14 @@ public class StationKeyMap {
     @ElementCollection
     private List<Integer> stations;
 
+    public StationKeyMap(String keywords, List<Integer> stations) {
+        this.keywords = keywords;
+        this.stations = stations;
+    }
+
+    public StationKeyMap() {
+    }
+
     public int getId() {
         return id;
     }

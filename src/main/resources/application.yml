@@ -9,12 +9,18 @@ server:
   port: ${PORT:80}
   servlet:
     session:
-      timeout: 100m
+      timeout: 10m
 telega:
   name: ${telega_name}
   apiToken: ${telega_apiToken}
 rw:
   proxy: ${rw_proxy}
+logging:
+  level:
+    root: info
+    org.springframework.web: info
+    org.hibernate: info
+    io.bot: debug
 ---
 spring:
   profiles: dev

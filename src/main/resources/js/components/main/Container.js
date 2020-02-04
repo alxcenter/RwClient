@@ -1,20 +1,18 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import IconButton from '@material-ui/core/IconButton';
-import SwapHorizOutlinedIcon from '@material-ui/icons/SwapHorizOutlined';
 import Container from '@material-ui/core/Container';
-import Asynchronous from './Autocomplete';
 import MaterialUIPickers from './DateUI';
 import ContainedButtons from './SearchButton';
 import Grid from '@material-ui/core/Grid';
 import TrainListTable from './trains/TrainTable';
 import CaptchaPopup from './CaptchaDialog';
-import {getTrainList, createMonitoring} from './trains/TrainSearcher'
+import {createMonitoring, getTrainList} from './trains/TrainSearcher'
 import AddUsersDialog from "./passengers/AddUsersDialog";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fade from "@material-ui/core/Fade";
 import SnackBar from '../SnackBar';
-
+import StationContainer from './StationContainer';
+import {CaptchaEx} from "../exceptions/CaptchaEx"
 
 
 export default function FixedContainer() {
@@ -25,8 +23,6 @@ export default function FixedContainer() {
     const [loading, setLoading] = React.useState(false);
     const [snackBarOpen, setSnackBarOpen] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState(null);
-    const [autocompleteState, setAutocompleteState] = React.useState({from: null, to: null, ver: 0});
-    let snack = {setSnackBarOpen: setSnackBarOpen, setSnackBarMessage: setSnackBarMessage};
 
     /*вызываем при нажатии на кнопку поиска поездов*/
     let handleSearchButton = function () {
@@ -36,12 +32,17 @@ export default function FixedContainer() {
             alert("Введите станцию прибытия");
         } else {
             setLoading(true);
-
             getTrainList(monitor)
                 .then(setTrainListOpen)
                 .then(() => setLoading(false))
-                .catch(() => {
-                    setCaptchaPopupOpen(true);
+                .catch((error) => {
+                    if (error instanceof CaptchaEx) {
+                        setCaptchaPopupOpen(true);
+                        console.error(error.message);
+                    }else {
+                        handleSetSnackBarMessage(error.message);
+                        setLoading(false);
+                    }
                 });
         }
     };
@@ -52,32 +53,16 @@ export default function FixedContainer() {
         setMonitor(temp);
     };
 
+    let handleSetSnackBarMessage = (message) => {
+      setSnackBarMessage(message);
+      setSnackBarOpen(message);
+    };
+
     let handleSetPlaceFilter = (placeFilter) => {
         let temp = monitor;
         temp.placeFilter = placeFilter;
         setMonitor(temp);
     };
-
-    let from = (<Asynchronous autocompleteName="Станция отправления"
-                              id={"async_from"}
-                              snack={snack}
-                              version={autocompleteState.ver}
-                              state={autocompleteState.from}
-                              setState={(state) => {autocompleteState.from = state}}
-                              station={monitor.fromStation}
-                              setStation={(station) => {
-                                  monitor.fromStation = station;
-                              }}/>);
-
-    let to = (<Asynchronous autocompleteName="Станция прибытия"
-                            id={"async_to"}
-                            version={autocompleteState.ver}
-                            state={autocompleteState.to}
-                            setState={(state) => {autocompleteState.to = state}}
-                            station={monitor.toStation}
-                            setStation={(station) => {
-                                monitor.toStation = station;
-                            }}/>);
 
     let handleSetTrain = (train) => {
         let temp = monitor;
@@ -94,18 +79,6 @@ export default function FixedContainer() {
     };
 
 
-    let handleChangeStations = () => {
-        console.log("start changing v." + autocompleteState.ver);
-        let mon = Object.assign({}, monitor);
-        let autoState = Object.assign({}, autocompleteState);
-        autoState.from = autocompleteState.to;
-        autoState.to = autocompleteState.from;
-        autoState.ver = autocompleteState.ver+1;
-        setAutocompleteState(autoState);
-        mon.fromStation = monitor.toStation;
-        mon.toStation = monitor.fromStation;
-        setMonitor(mon);
-    };
 
     return (
         <React.Fragment>
@@ -114,21 +87,9 @@ export default function FixedContainer() {
             </Fade>
             <CssBaseline/><br/>
             <Container fixed>
-                <Grid container direction="row" justify="center" alignItems="center">
-                    <Grid item>
-                        {from}
-                    </Grid>
-                    <Grid item>
-                        <IconButton color="secondary" aria-label="Change directions" disableFocusRipple={true}
-                                    disableRipple={true}
-                        onClick={handleChangeStations}>
-                            <SwapHorizOutlinedIcon color={"secondary"} fontSize={"large"}/>
-                        </IconButton>
-                    </Grid>
-                    <Grid item>
-                        {to}
-                    </Grid>
-                </Grid>
+                <StationContainer
+                    setSnackBarMessage={handleSetSnackBarMessage}
+                    setMonitor={setMonitor}/>
                 <Grid container direction="column" justify="center" alignItems="center">
                     <Grid item>
                         <MaterialUIPickers setDate={(date) => {
@@ -162,7 +123,7 @@ export default function FixedContainer() {
                     setPassengers={(passengers) => monitor.passengers = passengers}
                     setPlaceFilter={(placeFilter) => monitor.placeFilter = placeFilter}
                     onCreate={handleCreate}
-                    snack={snack}
+                    snack={handleSetSnackBarMessage}
                 />
             </Container>
             <SnackBar open={snackBarOpen}

@@ -15,7 +15,7 @@ public class ProxyStorage {
     @Autowired
     ProxyParser proxyParser;
 
-    private Queue<RwProxy> freshProxy;
+    private Queue<RwProxy> freshProxy = new LinkedList<>();
     private List<RwProxy> usedProxy = new LinkedList<>();
 
     @PostConstruct
@@ -23,9 +23,14 @@ public class ProxyStorage {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(() -> {
             List<RwProxy> validProxy = proxyParser.getValidProxy();
-            freshProxy = new LinkedList<>(validProxy);
+            validProxy.stream().filter(this::timeLimit5Sec)
+                    .forEach(freshProxy::add);
         });
         executorService.shutdown();
+    }
+
+    public boolean timeLimit5Sec(RwProxy rwProxy) {
+        return rwProxy.getResponseTime() < 5;
     }
 
     public RwProxy getNewProxy(){

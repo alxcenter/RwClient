@@ -2,13 +2,13 @@ package io.bot.uz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bot.uz.BotException.*;
-import io.bot.uz.Train;
+import io.bot.uz.model.Train;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -16,16 +16,16 @@ import java.util.stream.IntStream;
  */
 public class TrainParser {
 
-    public List<Train> getTrainList(String jsonText) throws OtherException, WrongDateException, TrainNotFoundException, ServiceTemporarilyUnavailableException, CaptchaException {
-        List<Train> list = new ArrayList<>();
+    public List<Train> getTrainList(String jsonText) throws RailWayException {
         errorChecker(jsonText);
-        JSONArray trainArrayList = new JSONObject(jsonText).getJSONObject("data").getJSONArray("list");
-        IntStream.range(0, trainArrayList.length())
-                .forEach(index ->{
-                    Train train = getTrain(trainArrayList.getJSONObject(index).toString());
-                    list.add(train);
-                });
-        return list;
+        JSONArray trainArrayList = new JSONObject(jsonText)
+                .getJSONObject("data")
+                .getJSONArray("list");
+        return IntStream.range(0, trainArrayList.length())
+                .mapToObj(trainArrayList::getJSONObject)
+                .map(JSONObject::toString)
+                .map(this::getTrain)
+                .collect(Collectors.toList());
     }
 
     /**

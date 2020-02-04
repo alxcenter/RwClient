@@ -23,15 +23,13 @@ import java.nio.charset.Charset;
 public class WebClientBeans {
 
     @Autowired
-    ProxyManager proxyManager;
+    private ProxyManager proxyManager;
 
     @Bean
     @SessionScope
     @Primary
     public RestTemplate getRestTemplateForWeb(){
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         RestTemplate restTemplate = new RestTemplate(getRequestFactory());
-        restTemplate.setRequestFactory(requestFactory);
         restTemplate.getMessageConverters()
                 .add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
         return restTemplate;
@@ -45,8 +43,6 @@ public class WebClientBeans {
         return requestFactory;
     }
 
-
-
     @Bean
     @SessionScope
     @Primary
@@ -58,17 +54,13 @@ public class WebClientBeans {
     @SessionScope
     @Primary
     public TrainSearch getTrainSearchForWeb(){
-        TrainSearch trainSearch = new TrainSearch();
-        trainSearch.setRequest(getRequestNtwForWeb());
-        return trainSearch;
+        return new TrainSearch(getRequestNtwForWeb());
     }
 
     @Bean
     @SessionScope
     @Primary
-    public StationSearcher getStationSearcherForWeb(RequestNtw requestNtw){
-        StationSearcher stationSearcher = new StationSearcher();
-        stationSearcher.setRequest(requestNtw);
-        return stationSearcher;
+    public StationSearcher getStationSearcherForWeb(){
+        return new StationSearcher(getRequestNtwForWeb());
     }
 }
