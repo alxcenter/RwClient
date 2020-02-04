@@ -1,6 +1,7 @@
 package io.bot.helper.proxy;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -10,10 +11,11 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@ConditionalOnBean(ProxyGrabber.class)
 @Component
 public class ProxyStorage {
     @Autowired
-    ProxyParser proxyParser;
+    private ProxyParser proxyParser;
 
     private Queue<RwProxy> freshProxy = new LinkedList<>();
     private List<RwProxy> usedProxy = new LinkedList<>();

@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.*;
 
+@ConditionalOnBean(ProxyGrabber.class)
 @Component
 public class ProxyParser {
 
@@ -35,7 +37,7 @@ public class ProxyParser {
     public List<RwProxy> getValidProxy() {
         proxyList = grabber.getProxyList();
         log.info("Input list for parsing has " + proxyList.size() + " proxies");
-        ExecutorService service = Executors.newFixedThreadPool(10, new ThreadFactoryBuilder().setNameFormat("Parse-proxy-thread-%d").build());
+        ExecutorService service = Executors.newFixedThreadPool(50, new ThreadFactoryBuilder().setNameFormat("Parse-proxy-thread-%d").build());
         latch = new CountDownLatch(proxyList.size());
         for (String x : proxyList) {
             String[] stringProxy = x.split(":");

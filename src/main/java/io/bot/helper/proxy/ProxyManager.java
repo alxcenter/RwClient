@@ -1,12 +1,14 @@
 package io.bot.helper.proxy;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+@ConditionalOnBean(ProxyGrabber.class)
 @Component
 @SessionScope
 public class ProxyManager {
