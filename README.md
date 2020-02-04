@@ -1,27 +1,31 @@
 # RwClient
 
-**RwClient** - клиентская часть для создания мониторинга слежения ж/д билетов.
+**RwClient** - client part of railway tickets monitoring.
 
-Для работы необходим Telegram Bot.
-Инструкция по созданию бота https://core.telegram.org/bots#creating-a-new-bot
+For running this application you should [create TelegramBot](https://core.telegram.org/bots#creating-a-new-bot)
 
-Закидываем имя бота и его токен в
-`src/main/resources/telega.properties`
+Set bot name and token in application.yml
 
-Для примера, бот уже есть в пропертях.
+```
+telega:
+    name: ${telega_name}
+    apiToken: ${telega_apiToken}
+```
+
+Client using Telegram Login Widget.
+For using OAuth you should [link your domain to the bot.](https://core.telegram.org/widgets/login#linking-your-domain-to-the-bot)
+
+Set MySQL or PostgreSQL connection in application.yml
+
+Run `mvn clean install` to build app
+
+Then run `src/main/java/io/bot/Application.java`
 
 
-Для работы с DB используется MySql.
+For start conversation with the bot, you can send him a message `/start`
 
-Конфиг для соединения в `src/main/resources/jetty.xml`
+Or you can use the web version `http://localhost/`
 
-При использовании другой DB необходимо добавить депеденси на драйвер в pom.xml
-
-запускаем при помощи maven
-mvn `jetty:run`
-
-Для работы с клиентом в телеграме необходимо написать боту `/start`
-
-Пример работы:
+Example:
 
 ![](src/main/resources/example.gif)

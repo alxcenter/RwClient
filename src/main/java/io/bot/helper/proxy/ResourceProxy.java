@@ -1,5 +1,6 @@
 package io.bot.helper.proxy;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component
+@Profile("dev")
 public class ResourceProxy implements ProxyGrabber {
 
     @Override
